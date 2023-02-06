@@ -88,9 +88,12 @@
                     </TextBlock>
                 </MenuItem.Header>
             </MenuItem>
-            <MenuItem Icon="{ZDY:Icon Kind=ArchiveSlash}" Header="弃用当前命名规则" Command="{Binding ExecuteCancelSelectedProfileCommand}"
-                      Visibility="{Binding SelectedProfile, Converter={ZDY:NullableToVisibilityConverter}}"/>
-            <Separator Visibility="{Binding SelectedProfile, Converter={ZDY:NullableToVisibilityConverter}}"/>
+            <MenuItem Icon="{ZDY:Icon Kind=ArchiveSlash}" Header="弃用当前命名规则" Command="{Binding ExecuteCancelSelectedProfileCommand}" Visibility="{Binding SelectedProfile, Converter={ZDY:NullableToVisibilityConverter}}"/>
+            <MenuItem Header="保存" Icon="{ZDY:Icon Kind=Save}" Command="{Binding ExecuteSaveProfileCommand}" CommandParameter="Save" Visibility="{Binding IsModifierListFound, Converter={ZDY:BoolToVisibilityConverter}}"/>
+            <MenuItem Header="另存为" Icon="{ZDY:Icon Kind=SaveAs}" Command="{Binding ExecuteSaveProfileCommand}" CommandParameter="SaveAs" Visibility="{Binding SelectedProfile, Converter={ZDY:NullableToVisibilityConverter}}"/>
+            <MenuItem Header="重命名" Icon="{ZDY:Icon Kind=CardEdit}" Command="{Binding ExecuteSaveProfileCommand}" CommandParameter="Rename" Visibility="{Binding SelectedProfile, Converter={ZDY:NullableToVisibilityConverter}}"/>
+            <MenuItem Header="删除" Icon="{ZDY:Icon Kind=ArchiveMinus}" Command="{Binding ExecuteRemoveProfileCommand}" Visibility="{Binding SelectedProfile, Converter={ZDY:NullableToVisibilityConverter}}"/>
+            <Separator />
             <MenuItem Header="使用已有命名规则" Icon="{ZDY:Icon Kind=Code}" ItemsSource="{Binding ProfileList}" Visibility="{Binding ProfileList, Converter={ZDY:CollectionLengthToVisibilityConverter}}">
                 <MenuItem.ItemContainerStyle>
                     <Style TargetType="MenuItem" BasedOn="{StaticResource Zhai.Famil.MenuItem}">
@@ -101,10 +104,6 @@
                     </Style>
                 </MenuItem.ItemContainerStyle>
             </MenuItem>
-            <MenuItem Header="保存" Icon="{ZDY:Icon Kind=Save}" Command="{Binding ExecuteSaveProfileCommand}" CommandParameter="Save"/>
-            <MenuItem Header="另存为" Icon="{ZDY:Icon Kind=SaveAs}" Command="{Binding ExecuteSaveProfileCommand}" CommandParameter="SaveAs" Visibility="{Binding SelectedProfile, Converter={ZDY:NullableToVisibilityConverter}}"/>
-            <MenuItem Header="重命名" Icon="{ZDY:Icon Kind=CardEdit}" Command="{Binding ExecuteSaveProfileCommand}" CommandParameter="Rename" Visibility="{Binding SelectedProfile, Converter={ZDY:NullableToVisibilityConverter}}"/>
-            <MenuItem Header="删除" Icon="{ZDY:Icon Kind=ArchiveMinus}" Command="{Binding ExecuteRemoveProfileCommand}" Visibility="{Binding SelectedProfile, Converter={ZDY:NullableToVisibilityConverter}}"/>
             <MenuItem Header="刷新" Icon="{ZDY:Icon Kind=Refresh}" Command="{Binding ExecuteRefreshedModifierListCommand}"/>
             <Separator/>
             <MenuItem Header="全部移除" Icon="{ZDY:Icon Kind=Delete}" Command="{Binding ExecuteRemoveAllModifierCommand}"/>
@@ -154,16 +153,12 @@
 
                 <Border Grid.Row="1" Grid.Column="0" Margin="0 0 12 0">
                     <ZDY:DataGrid ItemsSource="{Binding RenameNodeList}"
-                                dd:DragDrop.IsDragSource="{Binding IsDragDropEnabled}"
-                                dd:DragDrop.IsDropTarget="{Binding IsDragDropEnabled}"
-                                dd:DragDrop.UseDefaultDragAdorner="True"
-                                dd:DragDrop.DropHandler="{Binding RenamerDropHandler}"
-                                CanUserAddRows="False" AutoGenerateColumns="False" GridLinesVisibility="All"
-                                CanUserSortColumns="False" SelectionMode="Single"
-                                ContextMenu="{StaticResource FileListContextMenu}"
-                                VirtualizingPanel.VirtualizationMode="Standard"
-                                VirtualizingPanel.ScrollUnit="Pixel"
-                                VirtualizingPanel.IsVirtualizing="True">
+                                  CanUserAddRows="False" AutoGenerateColumns="False" GridLinesVisibility="All"
+                                  CanUserSortColumns="False" SelectionMode="Single"
+                                  ContextMenu="{StaticResource FileListContextMenu}"
+                                  VirtualizingPanel.VirtualizationMode="Standard"
+                                  VirtualizingPanel.ScrollUnit="Pixel"
+                                  VirtualizingPanel.IsVirtualizing="True">
                         <DataGrid.Resources>
                             <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource Zhai.Famil.DataGridRow}">
                                 <Setter Property="ToolTip">

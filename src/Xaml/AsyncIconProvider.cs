@@ -6,7 +6,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using Zhai.Famil.Common.Threads;
-using Zhai.Renamer.Model;
+using Zhai.Renamer.Models;
 
 namespace Zhai.Renamer
 {

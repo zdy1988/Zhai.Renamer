@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Zhai.Famil.Common.Threads;
 using Zhai.Famil.Controls;
-using Zhai.Renamer.Model;
+using Zhai.Renamer.Models;
 
 namespace Zhai.Renamer
 {
@@ -34,10 +34,18 @@ namespace Zhai.Renamer
                 {
                     var filePaths = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-                    var filePathNodeList = filePaths.Select(filePath => new PathNode(filePath)).ToList();
+                    if (filePaths != null)
+                    {
+                        var filePathNodeList = filePaths.Select(filePath => new PathNode(filePath)).ToList();
 
-                    await ViewModel.AddRenameNodeToListAsync(filePathNodeList);
+                        await ViewModel.AddRenameNodeToListAsync(filePathNodeList);
+                    }
                 }
+            };
+
+            Closed += (sender, e) =>
+            {
+                ViewModel.Cleanup();
             };
         }
     }

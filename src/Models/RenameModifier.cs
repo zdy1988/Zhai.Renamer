@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 using Zhai.Famil.Common.Mvvm;
 using Zhai.Renamer.Core;
 
-namespace Zhai.Renamer.Model
+namespace Zhai.Renamer.Models
 {
     [JsonObject(MemberSerialization.OptIn)]
     public class RenameModifier : ViewModelBase

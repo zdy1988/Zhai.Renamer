@@ -1,4 +1,4 @@
-﻿namespace Zhai.Renamer.Model
+﻿namespace Zhai.Renamer.Core
 {
     //Each modifier has 3 parts (in this file)
     //1 enum, 1 condition inside the constructor and 1 condition inside the switch

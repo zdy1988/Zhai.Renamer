@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Zhai.Renamer.Model;
+using Zhai.Renamer.Models;
 
 namespace Zhai.Renamer.Core
 {

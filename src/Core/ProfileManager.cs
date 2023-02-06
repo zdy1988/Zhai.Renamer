@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Documents;
-using Zhai.Renamer.Model;
+using Zhai.Renamer.Models;
 
 namespace Zhai.Renamer.Core
 {

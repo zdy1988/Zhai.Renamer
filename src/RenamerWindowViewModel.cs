@@ -8,11 +8,12 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using Zhai.Famil.Common.Mvvm;
 using Zhai.Famil.Common.Mvvm.Command;
 using Zhai.Famil.Common.Threads;
 using Zhai.Renamer.Core;
-using Zhai.Renamer.Model;
+using Zhai.Renamer.Models;
 using Zhai.Renamer.Properties;
 
 namespace Zhai.Renamer
@@ -147,6 +148,8 @@ namespace Zhai.Renamer
             set { Set(() => RenameNodeList, ref renameNodeList, value); }
         }
 
+
+
         private string renameNodeListSortKind;
         public string RenameNodeListSortKind
         {
@@ -202,12 +205,16 @@ namespace Zhai.Renamer
             set { Set(() => RenamingNodeName, ref renamingNodeName, value); }
         }
 
+
+
         private string outputFolderPath;
         public string OutputFolderPath
         {
             get { return outputFolderPath; }
             set { Set(() => OutputFolderPath, ref outputFolderPath, value); }
         }
+
+
 
         private bool isRecursiveLoad = false;
         public bool IsRecursiveLoad
@@ -314,8 +321,10 @@ namespace Zhai.Renamer
 
         #region Methods
 
-        public void Close()
+        public override void Cleanup()
         {
+            base.Cleanup();
+
             // 关闭时，保存最后一次规则设置
             if (Settings.Default.IsSaveLastProfile)
             {
@@ -345,6 +354,8 @@ namespace Zhai.Renamer
             {
                 IsRenameNodeListContainFile = true;
                 IsRenameNodeContainDirectory = true;
+
+                IsRecursiveLoad = false;
             }
 
             IsBackuped = false;
@@ -353,8 +364,6 @@ namespace Zhai.Renamer
             RenamingNodeName = String.Empty;
 
             OutputFolderPath = String.Empty;
-
-            if (isDeep) IsRecursiveLoad = false;
 
             SelectedProfile = null;
 
@@ -727,64 +736,6 @@ namespace Zhai.Renamer
 
         #endregion
 
-        #region Untils
-
-        public bool TryGetFolderPathNode(out PathNode folderPathNode)
-        {
-            if (Zhai.Famil.Win32.CommonDialog.OpenFolderDialog(out string filename))
-            {
-                DirectorySecurity security = new DirectorySecurity(filename, AccessControlSections.Access);
-
-                if (!security.AreAccessRulesProtected)
-                {
-                    folderPathNode = new PathNode(filename);
-
-                    return true;
-                }
-                else
-                {
-                    PublishNotificationMessage($"软件对路径：“{filename}”没有访问权限！");
-                }
-            }
-
-            folderPathNode = null;
-
-            return false;
-        }
-
-        public bool TryGetFolderPathNode(out List<PathNode> dirPathNodeList)
-        {
-            if (Zhai.Famil.Win32.CommonDialog.OpenFolderDialog(out string filename))
-            {
-                dirPathNodeList = new List<PathNode> { new PathNode(filename) };
-
-                return true;
-            }
-
-            dirPathNodeList = null;
-
-            return false;
-        }
-
-        public bool TryGetFilePathNodeList(out List<PathNode> filePathNodeList)
-        {
-            if (Zhai.Famil.Win32.CommonDialog.OpenMultiFileDialog(out string[] filenames))
-            {
-                if (filenames.Any())
-                {
-                    filePathNodeList = filenames.Select(fileName => new PathNode(fileName)).ToList();
-
-                    return true;
-                }
-            }
-
-            filePathNodeList = null;
-
-            return false;
-        }
-
-        #endregion
-
         #region Commands
 
         public RelayCommand<String[]> ExecuteSetRegexHelperCommand => new Lazy<RelayCommand<String[]>>(() => new RelayCommand<String[]>((regexHelper) =>
@@ -809,15 +760,22 @@ namespace Zhai.Renamer
         {
             if (type == "File")
             {
-                if (TryGetFilePathNodeList(out List<PathNode> filePathNodeList))
+                if (Zhai.Famil.Win32.CommonDialog.OpenMultiFileDialog(out string[] filenames))
                 {
-                    await AddRenameNodeToListAsync(filePathNodeList);
+                    if (filenames.Any())
+                    {
+                        var filePathNodeList = filenames.Select(fileName => new PathNode(fileName)).ToList();
+
+                        await AddRenameNodeToListAsync(filePathNodeList);
+                    }
                 }
             }
             else
             {
-                if (TryGetFolderPathNode(out List<PathNode> dirPathNodeList))
+                if (Zhai.Famil.Win32.CommonDialog.OpenFolderDialog(out string filename))
                 {
+                    var dirPathNodeList = new List<PathNode> { new PathNode(filename) };
+
                     await AddRenameNodeToListAsync(dirPathNodeList);
                 }
             }
@@ -1021,10 +979,18 @@ namespace Zhai.Renamer
 
         public RelayCommand ExecuteSelectOutputFolderPathCommand => new Lazy<RelayCommand>(() => new RelayCommand(() =>
         {
-
-            if (TryGetFolderPathNode(out PathNode folderPathNode))
+            if (Zhai.Famil.Win32.CommonDialog.OpenFolderDialog(out string filename))
             {
-                OutputFolderPath = folderPathNode.Path;
+                var security = new DirectorySecurity(filename, AccessControlSections.Access);
+
+                if (!security.AreAccessRulesProtected)
+                {
+                    OutputFolderPath = filename;
+                }
+                else
+                {
+                    PublishNotificationMessage($"软件对路径：“{filename}”没有访问权限！");
+                }
             }
 
         })).Value;
@@ -1086,7 +1052,14 @@ namespace Zhai.Renamer
 
         public override void DragOver(IDropInfo dropInfo)
         {
-            base.DragOver(dropInfo);
+            if (((GongSolutions.Wpf.DragDrop.DropInfo)dropInfo).TargetItem is RenameModifier)
+            {
+                dropInfo.Effects = DragDropEffects.Move;
+            }
+            else
+            {
+                dropInfo.Effects = DragDropEffects.None;
+            }
         }
 
         public override void Drop(IDropInfo dropInfo)

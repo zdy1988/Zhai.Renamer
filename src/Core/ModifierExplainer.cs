@@ -1,6 +1,4 @@
-﻿using Zhai.Renamer.Model;
-
-namespace Zhai.Renamer.Core
+﻿namespace Zhai.Renamer.Core
 {
     internal static class ModifierExplainer
     {

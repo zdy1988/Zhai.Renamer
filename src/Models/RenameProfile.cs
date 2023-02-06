@@ -5,7 +5,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Zhai.Renamer.Core;
 
-namespace Zhai.Renamer.Model
+namespace Zhai.Renamer.Models
 {
     public class RenameProfile
     {

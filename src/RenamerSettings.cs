@@ -7,7 +7,8 @@ using System.Text;
 using System.Windows;
 using Microsoft.Win32;
 using Newtonsoft.Json;
-using Zhai.Renamer.Model;
+using Zhai.Renamer.Core;
+using Zhai.Renamer.Models;
 using Zhai.Renamer.Properties;
 
 namespace Zhai.Renamer
@@ -132,7 +133,6 @@ namespace Zhai.Renamer
                             new RenameModifier{ ModifierKind = ModifierKind.AppendBefore, FirstArgument=" ", SecondArgument=""},
                             new RenameModifier{ ModifierKind = ModifierKind.AddNumbering, FirstArgument="", SecondArgument=""},
                             new RenameModifier{ ModifierKind = ModifierKind.AppendBefore, FirstArgument="No.", SecondArgument=""},
-                            new RenameModifier{ ModifierKind = ModifierKind.SentenceCase, FirstArgument="", SecondArgument=""}
                         }
                     },
 
@@ -142,9 +142,22 @@ namespace Zhai.Renamer
                             new RenameModifier{ ModifierKind = ModifierKind.AppendBefore, FirstArgument=" ", SecondArgument=""},
                             new RenameModifier{ ModifierKind = ModifierKind.AddNumbering, FirstArgument="", SecondArgument=""},
                             new RenameModifier{ ModifierKind = ModifierKind.AppendBefore, FirstArgument="Vol.", SecondArgument=""},
-                            new RenameModifier{ ModifierKind = ModifierKind.SentenceCase, FirstArgument="", SecondArgument=""}
                         }
-                    }
+                    },
+
+                    {
+                        "文件名.7z",
+                        new List<RenameModifier> {
+                            new RenameModifier{ ModifierKind = ModifierKind.AppendAfter, FirstArgument=".7z", SecondArgument=""},
+                        }
+                    },
+
+                    {
+                        "文件名.rar",
+                        new List<RenameModifier> {
+                            new RenameModifier{ ModifierKind = ModifierKind.AppendAfter, FirstArgument=".rar", SecondArgument=""},
+                        }
+                    },
                 };
 
                 Settings.Default.Modifiers = JsonConvert.SerializeObject(modifiers);

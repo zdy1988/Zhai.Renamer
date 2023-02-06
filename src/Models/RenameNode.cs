@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using Zhai.Famil.Common.Mvvm;
 
-namespace Zhai.Renamer.Model
+namespace Zhai.Renamer.Models
 {
     public class RenameNode : ViewModelBase
     {
