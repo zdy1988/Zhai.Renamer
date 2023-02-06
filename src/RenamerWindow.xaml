@@ -1,0 +1,411 @@
+﻿<ZDY:GlassesWindow x:Class="Zhai.Renamer.RenamerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Zhai.Renamer"
+        xmlns:dd="urn:gong-wpf-dragdrop"
+        xmlns:ZDY="http://www.zdyla.com/coding"   
+        xmlns:Properties="clr-namespace:Zhai.Renamer.Properties"
+        xmlns:Converters="clr-namespace:Zhai.Renamer.Converters"  
+        Theme="{Binding SettingsWindow.IsWindowDarked, Source={StaticResource Locator}, Converter={Converters:WindowThemeConverter}, Mode=TwoWay}" 
+        IsTransparency="{Binding SettingsWindow.IsWindowTransparency, Source={StaticResource Locator}, Mode=TwoWay}" 
+        IsTopmostButtonEnabled="True"
+        IsThemeButtonEnabled="True"
+        IsTransparencyButtonEnabled="True"
+        Title="{Binding Path=AppName, Source={x:Static Properties:Settings.Default}}" 
+        DataContext="{Binding RenamerWindow, Source={StaticResource Locator}}"
+        AllowDrop="True"
+        WindowStartupLocation ="CenterScreen"
+        Height="720" Width="960"
+        MinHeight="450" MinWidth="600"
+        Icon="favicon.ico"
+        mc:Ignorable="d">
+    <ZDY:GlassesWindow.Resources>
+        <Style x:Key="ModifierListTranslateHiddenBorder" TargetType="Border">
+            <Setter Property="ZDY:Animate.Opacity" Value="{ZDY:AnimateOpacityParameter From=0, To=1, Duration=200, TransitionOn=Visibility}"/>
+            <Setter Property="ZDY:Animate.Translate" Value="{ZDY:AnimateTranslateParameter From='10,0', To='0,0', Duration=200, TransitionOn=Visibility}"/>
+            <Setter Property="ZDY:Animate.Visibility" Value="{Binding IsModifierSetting, Converter={ZDY:BoolToInverseVisibilityConverter}, ConverterParameter=Hidden}"/>
+        </Style>
+
+        <ContextMenu x:Key="FileListContextMenu" DataContext="{Binding RenamerWindow, Source={StaticResource Locator}}">
+            <MenuItem Header="追加文件" Icon="{ZDY:Icon Kind=ArchiveAdd}" Command="{Binding ExecuteAddRenameNodeToListCommand}" CommandParameter="File"/>
+            <MenuItem Header="追加目录" Icon="{ZDY:Icon Kind=FolderAdd}" Command="{Binding ExecuteAddRenameNodeToListCommand}" CommandParameter="Directory"/>
+            <MenuItem Header="递归加载" Command="{Binding ExecuteReloadRenameNodeListCommand}" IsCheckable="True" IsChecked="{Binding IsRecursiveLoad}"/>
+            <Separator/>
+            <MenuItem Header="过滤选项" Icon="{ZDY:Icon Kind=VuesaxOutlineFilterAdd}">
+                <MenuItem Header="包含目录" Command="{Binding ExecuteReloadRenameNodeListCommand}" IsCheckable="True" IsChecked="{Binding IsRenameNodeContainDirectory}"/>
+                <MenuItem Header="包含文件" Command="{Binding ExecuteReloadRenameNodeListCommand}" IsCheckable="True" IsChecked="{Binding IsRenameNodeListContainFile}"/>
+                <Separator/>
+                <MenuItem Header="字符过滤" Icon="{ZDY:Icon Kind=VuesaxOutlineDocumentFilter}" ItemsSource="{Binding RegexFilters}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="MenuItem" BasedOn="{StaticResource Zhai.Famil.MenuItem}">
+                            <Setter Property="Header" Value="{Binding [0]}"/>
+                            <Setter Property="Command" Value="{Binding DataContext.ExecuteSetRegexHelperCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                            <Setter Property="CommandParameter" Value="{Binding }"/>
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                </MenuItem>
+                <MenuItem Header="取消过滤" Icon="{ZDY:Icon Kind=VuesaxOutlineFilterSquare}"
+                          Command="{Binding ExecuteCancelRegexHelperCommand}"
+                          Foreground="{DynamicResource ZhaiErrorColorBrush}"
+                          Visibility="{Binding InputRegex, Converter={ZDY:NullOrEmptyStringToVisibilityConverter}}">
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="一键附加" Icon="{ZDY:Icon Kind=PenAdd}" ItemsSource="{Binding QuickModifiers}" Visibility="{Binding QuickModifiers, Converter={ZDY:CollectionLengthToVisibilityConverter}}">
+                <MenuItem.ItemContainerStyle>
+                    <Style TargetType="MenuItem" BasedOn="{StaticResource Zhai.Famil.MenuItem}">
+                        <Setter Property="Header" Value="{Binding Key}"/>
+                        <Setter Property="Command" Value="{Binding DataContext.ExecuteAdditionalModifierCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                        <Setter Property="CommandParameter" Value="{Binding Value}"/>
+                    </Style>
+                </MenuItem.ItemContainerStyle>
+            </MenuItem>
+            <MenuItem Header="信息统计" Icon="{ZDY:Icon Kind=Info}">
+                <MenuItem Header="文件数量" Command="{Binding ExecuteCountingFileQuantityCommand}" IsCheckable="True" IsChecked="{Binding IsCountingFileQuantity}"/>
+                <MenuItem Header="创建时间" Command="{Binding ExecuteCountingCreationTimeCommand}" IsCheckable="True" IsChecked="{Binding IsCountingCreationTime}"/>
+                <MenuItem Header="修改时间" Command="{Binding ExecuteCountingModifiedTimeCommand}" IsCheckable="True" IsChecked="{Binding IsCountingModifiedTime}"/>
+            </MenuItem>
+            <MenuItem Header="排序方式" Icon="{ZDY:Icon Kind=Sort}">
+                <MenuItem Header="名称" CommandParameter="Name" Command="{Binding ExecuteSortedRenameNodeListCommand}"/>
+                <MenuItem Header="类型" CommandParameter="Extension" Command="{Binding ExecuteSortedRenameNodeListCommand}"/>
+                <MenuItem Header="大小" CommandParameter="Size" Command="{Binding ExecuteSortedRenameNodeListCommand}"/>
+                <MenuItem Header="创建时间" CommandParameter="CreationTime" Command="{Binding ExecuteSortedRenameNodeListCommand}"/>
+                <MenuItem Header="修改时间" CommandParameter="ModifiedTime" Command="{Binding ExecuteSortedRenameNodeListCommand}"/>
+            </MenuItem>
+            <MenuItem Header="{Binding IsDragDropEnabled, Converter={ZDY:BoolToStringToggledConverter}, ConverterParameter=启用拖放-禁用拖放}"
+                      IsCheckable="True" IsChecked="{Binding IsDragDropEnabled}"/>
+            <MenuItem Header="刷新" Icon="{ZDY:Icon Kind=Refresh}" Command="{Binding ExecuteRefreshedRenameNodeListCommand}"/>
+            <Separator/>
+            <MenuItem Header="全部移除" Icon="{ZDY:Icon Kind=Delete}" Command="{Binding ExecuteRemoveAllRenameNodeCommand}"/>
+        </ContextMenu>
+        <ContextMenu x:Key="ModifierListContextMenu" DataContext="{Binding RenamerWindow, Source={StaticResource Locator}}">
+            <MenuItem Icon="{ZDY:Icon Kind=ArchiveTick}" Visibility="{Binding SelectedProfile, Converter={ZDY:NullableToVisibilityConverter}}" IsHitTestVisible="False" Foreground="{x:Static SystemColors.HighlightBrush}">
+                <MenuItem.Header>
+                    <TextBlock>
+                        <TextBlock Text="当前命名规则："/>
+                        <TextBlock Text="{Binding SelectedProfile.Name}"/>
+                    </TextBlock>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem Icon="{ZDY:Icon Kind=ArchiveSlash}" Header="弃用当前命名规则" Command="{Binding ExecuteCancelSelectedProfileCommand}"
+                      Visibility="{Binding SelectedProfile, Converter={ZDY:NullableToVisibilityConverter}}"/>
+            <Separator Visibility="{Binding SelectedProfile, Converter={ZDY:NullableToVisibilityConverter}}"/>
+            <MenuItem Header="使用已有命名规则" Icon="{ZDY:Icon Kind=Code}" ItemsSource="{Binding ProfileList}" Visibility="{Binding ProfileList, Converter={ZDY:CollectionLengthToVisibilityConverter}}">
+                <MenuItem.ItemContainerStyle>
+                    <Style TargetType="MenuItem" BasedOn="{StaticResource Zhai.Famil.MenuItem}">
+                        <Setter Property="MinWidth" Value="140"/>
+                        <Setter Property="Header" Value="{Binding Name}"/>
+                        <Setter Property="Command" Value="{Binding DataContext.ExecuteSelectedProfileCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                        <Setter Property="CommandParameter" Value="{Binding }"/>
+                    </Style>
+                </MenuItem.ItemContainerStyle>
+            </MenuItem>
+            <MenuItem Header="保存" Icon="{ZDY:Icon Kind=Save}" Command="{Binding ExecuteSaveProfileCommand}" CommandParameter="Save"/>
+            <MenuItem Header="另存为" Icon="{ZDY:Icon Kind=SaveAs}" Command="{Binding ExecuteSaveProfileCommand}" CommandParameter="SaveAs" Visibility="{Binding SelectedProfile, Converter={ZDY:NullableToVisibilityConverter}}"/>
+            <MenuItem Header="重命名" Icon="{ZDY:Icon Kind=CardEdit}" Command="{Binding ExecuteSaveProfileCommand}" CommandParameter="Rename" Visibility="{Binding SelectedProfile, Converter={ZDY:NullableToVisibilityConverter}}"/>
+            <MenuItem Header="删除" Icon="{ZDY:Icon Kind=ArchiveMinus}" Command="{Binding ExecuteRemoveProfileCommand}" Visibility="{Binding SelectedProfile, Converter={ZDY:NullableToVisibilityConverter}}"/>
+            <MenuItem Header="刷新" Icon="{ZDY:Icon Kind=Refresh}" Command="{Binding ExecuteRefreshedModifierListCommand}"/>
+            <Separator/>
+            <MenuItem Header="全部移除" Icon="{ZDY:Icon Kind=Delete}" Command="{Binding ExecuteRemoveAllModifierCommand}"/>
+        </ContextMenu>
+    </ZDY:GlassesWindow.Resources>
+    <Grid>
+        <Grid Margin="24 0 24 24">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Margin="0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="320"/>
+                    <ColumnDefinition Width="360" MinWidth="320"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.IsEnabled>
+                    <MultiBinding Converter="{ZDY:MultiBoolToBoolConverter}" ConverterParameter="AND">
+                        <Binding Path="IsRenameNodeListFound"/>
+                        <Binding Path="IsRenameNodeListLoaded"/>
+                    </MultiBinding>
+                </Grid.IsEnabled>
+
+                <Border Grid.Row="0" Grid.ColumnSpan="2" Padding="0 24 0 12">
+                    <ZDY:TextBox ZDY:TextBoxExtension.Placeholder="待命名字符串过滤正则表达式 ..." 
+                                 ZDY:TextBoxExtension.Icon="Code"
+                                 Width="240" BorderThickness="1"
+                                 Text="{Binding InputRegex, UpdateSourceTrigger=PropertyChanged}"
+                                 VerticalAlignment="Center" HorizontalAlignment="Left">
+                        <ZDY:TextBox.ContextMenu>
+                            <ContextMenu ItemsSource="{Binding RegexFilters}">
+                                <ContextMenu.ItemContainerStyle>
+                                    <Style TargetType="{x:Type MenuItem}">
+                                        <Setter Property="Header" Value="{Binding [0]}"/>
+                                        <Setter Property="Command" Value="{Binding DataContext.ExecuteSetRegexHelperCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                                        <Setter Property="CommandParameter" Value="{Binding }"/>
+                                    </Style>
+                                </ContextMenu.ItemContainerStyle>
+                            </ContextMenu>
+                        </ZDY:TextBox.ContextMenu>
+                    </ZDY:TextBox>
+                </Border>
+
+                <Border Grid.Row="1" Grid.Column="0" Margin="0 0 12 0">
+                    <ZDY:DataGrid ItemsSource="{Binding RenameNodeList}"
+                                dd:DragDrop.IsDragSource="{Binding IsDragDropEnabled}"
+                                dd:DragDrop.IsDropTarget="{Binding IsDragDropEnabled}"
+                                dd:DragDrop.UseDefaultDragAdorner="True"
+                                dd:DragDrop.DropHandler="{Binding RenamerDropHandler}"
+                                CanUserAddRows="False" AutoGenerateColumns="False" GridLinesVisibility="All"
+                                CanUserSortColumns="False" SelectionMode="Single"
+                                ContextMenu="{StaticResource FileListContextMenu}"
+                                VirtualizingPanel.VirtualizationMode="Standard"
+                                VirtualizingPanel.ScrollUnit="Pixel"
+                                VirtualizingPanel.IsVirtualizing="True">
+                        <DataGrid.Resources>
+                            <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource Zhai.Famil.DataGridRow}">
+                                <Setter Property="ToolTip">
+                                    <Setter.Value>
+                                        <TextBlock Text="{Binding Converter={Converters:RenameNodeFullPathConverter}}" MaxWidth="480" TextWrapping="WrapWithOverflow"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=IsError}" Value="True">
+                                        <Setter Property="Foreground" Value="{StaticResource Zhai.Famil.ErrorBrush}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="编号" Width="38" MinWidth="38" CanUserResize="False">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={Converters:DataGridRowIndexConverter}}" TextAlignment="Center" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn MinWidth="180" Header="新名称">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <DockPanel VerticalAlignment="Center">
+                                            <Image local:AsyncIconProvider.RenameNode="{Binding }" Width="18" Height="18" VerticalAlignment="Center" Margin="0 0 4 0"/>
+                                            <ZDY:IconButton Icon="VuesaxOutlineInformation" Margin="0 -8" ToolTip="{Binding ErrorMessage}" Foreground="{StaticResource Zhai.Famil.ErrorBrush}" Visibility="{Binding IsError, Converter={ZDY:BoolToVisibilityConverter}}"/>
+                                            <TextBlock Padding="3,0" VerticalAlignment="Center" Text="{Binding ModifiedName}" TextTrimming="CharacterEllipsis"/>
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn MinWidth="180" Header="旧名称">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Padding="3,0" VerticalAlignment="Center" Text="{Binding OriginalName}" TextTrimming="CharacterEllipsis"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Width="100" Header="文件数量" Visibility="{Binding RenamerWindow.IsCountingFileQuantity, Source={StaticResource Locator}, Converter={ZDY:BoolToVisibilityConverter}}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Padding="3,0" VerticalAlignment="Center" Text="{Binding FileQuantity}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="创建时间" Width="100" Visibility="{Binding RenamerWindow.IsCountingCreationTime, Source={StaticResource Locator}, Converter={ZDY:BoolToVisibilityConverter}}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <TextBlock x:Name="CreationTimeTextBlock" Text="{Binding SelectedCreationTime}"
+                                                       Visibility="{Binding ElementName=CreationTimeComboBox ,Path=Visibility, Converter={ZDY:VisibilityToInverseVisibilityConverter}}"/>
+                                            <ZDY:ComboBox x:Name="CreationTimeComboBox" Margin="0 -6" BorderThickness="0" 
+                                                      ItemsSource="{Binding AllCreationTime}" SelectedValue="{Binding SelectedCreationTime, UpdateSourceTrigger=PropertyChanged}">
+                                                <ZDY:ComboBox.Visibility>
+                                                    <MultiBinding Converter="{ZDY:NumericalComparisonToVisibilityConverter}" ConverterParameter=">=">
+                                                        <Binding Path="AllCreationTime.Count"/>
+                                                        <Binding Source="2"/>
+                                                    </MultiBinding>
+                                                </ZDY:ComboBox.Visibility>
+                                            </ZDY:ComboBox>
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="修改时间" Width="100" Visibility="{Binding RenamerWindow.IsCountingModifiedTime, Source={StaticResource Locator}, Converter={ZDY:BoolToVisibilityConverter}}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <TextBlock x:Name="ModifiedTimeTextBlock" Text="{Binding SelectedModifiedTime}"  
+                                                       Visibility="{Binding ElementName=ModifiedTimeComboBox ,Path=Visibility, Converter={ZDY:VisibilityToInverseVisibilityConverter}}">
+                                            </TextBlock>
+                                            <ZDY:ComboBox x:Name="ModifiedTimeComboBox" Margin="0 -6" BorderThickness="0"
+                                                      ItemsSource="{Binding AllModifiedTime}" SelectedItem="{Binding SelectedModifiedTime, UpdateSourceTrigger=PropertyChanged}">
+                                                <ZDY:ComboBox.Visibility>
+                                                    <MultiBinding Converter="{ZDY:NumericalComparisonToVisibilityConverter}" ConverterParameter=">=">
+                                                        <Binding Path="AllModifiedTime.Count"/>
+                                                        <Binding Source="2"/>
+                                                    </MultiBinding>
+                                                </ZDY:ComboBox.Visibility>
+                                            </ZDY:ComboBox>
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="" Width="38" MinWidth="38">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ZDY:IconButton Icon="Close" IconSize="10" HorizontalAlignment="Center" Margin="-6"
+                                                        Command="{Binding DataContext.ExecuteRemoveRenameNodeCommand, RelativeSource={RelativeSource AncestorType=ZDY:DataGrid}}" 
+                                                        CommandParameter="{Binding}">
+                                        </ZDY:IconButton>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </ZDY:DataGrid>
+                </Border>
+
+                <Border Grid.Row="1" Grid.Column="1" Margin="0 0 0 0" Style="{StaticResource ModifierListTranslateHiddenBorder}"
+                            x:Name="ModifierListContainer">
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Bottom">
+                            <DockPanel Margin="0 12 0 0">
+                                <ZDY:TextBox ZDY:TextBoxExtension.Placeholder="输出结果到其他目录..." 
+                                             ZDY:TextBoxExtension.IsClearButtonEnabled="True"
+                                             Margin="0 0 6 0" IsReadOnly="True" Text="{Binding OutputFolderPath}">
+                                    <ZDY:TextBoxExtension.AddonContent>
+                                        <ZDY:IconButton DockPanel.Dock="Right" Icon="Open" VerticalAlignment="Center" Command="{Binding ExecuteSelectOutputFolderPathCommand}"/>
+                                    </ZDY:TextBoxExtension.AddonContent>
+                                </ZDY:TextBox>
+                            </DockPanel>
+                            <DockPanel Margin="0 12 0 0">
+                                <ZDY:Button Command="{Binding ExecuteToggleModifierSettingsCommand}"
+                                            Content="选择规则">
+                                </ZDY:Button>
+                                <ZDY:Button DockPanel.Dock="Right"
+                                            IsEnabled="{Binding IsModifierListFound}" 
+                                            Command="{Binding ExecuteRenamedCommand}"
+                                            Content="提交命名">
+                                </ZDY:Button>
+                                <ZDY:Button DockPanel.Dock="Right"
+                                            Visibility="{Binding IsBackuped, Converter={ZDY:BoolToVisibilityConverter}}"
+                                            Command="{Binding ExecuteRevertCommand}" 
+                                            Content="还原上次">
+                                </ZDY:Button>
+                            </DockPanel>
+                        </StackPanel>
+
+                        <ZDY:DataGrid ItemsSource="{Binding ModifierList}"
+                                    dd:DragDrop.IsDragSource="True"
+                                    dd:DragDrop.IsDropTarget="True"
+                                    dd:DragDrop.DropHandler="{Binding RenamerDropHandler}"
+                                    CanUserAddRows="False" AutoGenerateColumns="False" GridLinesVisibility="All"
+                                    CanUserSortColumns="False" SelectionMode="Single"
+                                    ContextMenu="{StaticResource ModifierListContextMenu}"
+                                    VirtualizingPanel.VirtualizationMode="Standard"
+                                    VirtualizingPanel.ScrollUnit="Pixel"
+                                    VirtualizingPanel.IsVirtualizing="True">
+                            <DataGrid.Resources>
+                                <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource Zhai.Famil.DataGridRow}">
+                                    <Setter Property="ToolTip">
+                                        <Setter.Value>
+                                            <TextBlock Text="{Binding Note}" MaxWidth="240" TextWrapping="WrapWithOverflow"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="编号" Width="38" MinWidth="38" CanUserResize="False">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={Converters:DataGridRowIndexConverter}}" TextAlignment="Center" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="规则说明" Width="240" MinWidth="240">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Padding="3,0" VerticalAlignment="Center" Text="{Binding Note}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="" Width="38" MinWidth="38">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ZDY:IconButton Icon="Close" IconSize="10" HorizontalAlignment="Center" Margin="-6"
+                                                        Command="{Binding DataContext.ExecuteRemoveModifierCommand, RelativeSource={RelativeSource AncestorType=ZDY:DataGrid}}" 
+                                                        CommandParameter="{Binding}">
+                                            </ZDY:IconButton>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </ZDY:DataGrid>
+                    </DockPanel>
+                </Border>
+
+                <GridSplitter Grid.Row="1" Grid.Column="1" Margin="-7 0 0 0" Width="2" HorizontalAlignment="Left" Background="Transparent"/>
+            </Grid>
+            <Grid Grid.Row="1" Margin="0 12 0 -6">
+                <DockPanel Visibility="{Binding IsRenameWorking, Converter={ZDY:BoolToInverseVisibilityConverter}}">
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                        <ZDY:Loading Width="18" Height="18" Margin="0 -4 8 -4" Foreground="{x:Static SystemColors.HighlightBrush}">
+                            <ZDY:Loading.Visibility>
+                                <MultiBinding Converter="{ZDY:MultiBoolToVisibilityConverter}" ConverterParameter="OR">
+                                    <Binding Path="IsBusy"/>
+                                    <Binding Path="IsRenameNodeListLoaded" Converter="{ZDY:BoolToInverseBoolConverter}"/>
+                                </MultiBinding>
+                            </ZDY:Loading.Visibility>
+                        </ZDY:Loading>
+                        <TextBlock Text="已准备就绪 ..." VerticalAlignment="Center" Visibility="{Binding IsBusy, Converter={ZDY:BoolToInverseVisibilityConverter}}"/>
+                        <TextBlock Text="忙碌中 ..." VerticalAlignment="Center" Visibility="{Binding IsBusy,Converter={ZDY:BoolToVisibilityConverter}}"/>
+                    </StackPanel>
+                </DockPanel>
+                <DockPanel Visibility="{Binding IsRenameWorking, Converter={ZDY:BoolToVisibilityConverter}}">
+                    <ZDY:Button DockPanel.Dock="Right" Margin="12 0 0 0" FontSize="12" Command="{Binding ExecuteCancelRenamedCommand}" Content="取消命名"/>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="{Binding RenamingNodeName, StringFormat=正在处理： {0} ...}"/>
+                        <ZDY:ProgressBar Height="5" Minimum="0" Maximum="100" Value="{Binding RenameProgressValue}" BorderThickness="0" Margin="0 8 0 0" CornerRadius="2" Progressground="{StaticResource Zhai.Famil.ColorfulBrush}" />
+                    </StackPanel>
+                </DockPanel>
+            </Grid>
+            <Grid x:Name="SelectFileButtonContainer">
+                <Grid Visibility="{Binding IsRenameNodeListFound, Converter={ZDY:BoolToInverseVisibilityConverter}}" Background="#50000000" Margin="-100">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
+                        <StackPanel.Resources>
+                            <Style TargetType="ZDY:Button">
+                                <Setter Property="Margin" Value="0 0 14 0"/>
+                                <Setter Property="Height" Value="64"/>
+                                <Setter Property="BorderThickness" Value="2"/>
+                                <Setter Property="CornerRadius" Value="4"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <ZDY:Button Command="{Binding ExecuteAddRenameNodeToListCommand}" CommandParameter="File" VerticalContentAlignment="Center">
+                            <StackPanel Orientation="Horizontal" Margin="8 -2 8 0">
+                                <ZDY:Icon Kind="ArchiveAdd" Width="20" Height="20" Margin="-2 2 8 0"/>
+                                <TextBlock FontSize="18">选择文件</TextBlock>
+                            </StackPanel>
+                        </ZDY:Button>
+                        <ZDY:Button Command="{Binding ExecuteAddRenameNodeToListCommand}" CommandParameter="Directory" VerticalContentAlignment="Center">
+                            <StackPanel Orientation="Horizontal" Margin="8 -2 8 0">
+                                <ZDY:Icon Kind="FolderAdd" Width="20" Height="20" Margin="-2 2 8 0"/>
+                                <TextBlock FontSize="18">选择目录</TextBlock>
+                            </StackPanel>
+                        </ZDY:Button>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Grid>
+        <ZDY:Drawer IsRightDrawerOpen="{Binding IsModifierSetting}">
+            <ZDY:Drawer.RightDrawerContent>
+                <local:RenamerModifierSelectionPanel Width="{Binding Source={x:Reference ModifierListContainer}, Path=ActualWidth, Converter={ZDY:MathConverter}, ConverterParameter=x+24}"/>
+            </ZDY:Drawer.RightDrawerContent>
+        </ZDY:Drawer>
+        <ZDY:Hint Text="{Binding NotificationMessage}" FontWeight="Normal" CornerRadius="4" Margin="0 -160 0 0" Background="{x:Static SystemColors.HighlightBrush}" Duration="0:0:5"/>
+    </Grid>
+</ZDY:GlassesWindow>
