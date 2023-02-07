@@ -9,7 +9,7 @@ namespace Zhai.Renamer
     /// <summary>
     /// AboutWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class AboutWindow : TransparentWindow
+    public partial class AboutWindow : FamilWindow
     {
         public AboutWindow()
         {

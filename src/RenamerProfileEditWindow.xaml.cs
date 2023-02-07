@@ -18,7 +18,7 @@ namespace Zhai.Renamer
     /// <summary>
     /// RenamerProfileEditWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class RenamerProfileEditWindow : TransparentWindow
+    public partial class RenamerProfileEditWindow : FamilWindow
     {
         internal RenamerWindowViewModel ViewModel => DataContext as RenamerWindowViewModel;
 
