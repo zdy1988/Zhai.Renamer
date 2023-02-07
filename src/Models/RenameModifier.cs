@@ -42,7 +42,7 @@ namespace Zhai.Renamer.Models
                 position1 = y == null || y.ToString() == "" ? 0 : Convert.ToInt32(y);
             }
 
-            else if (ModifierKind == ModifierKind.AddNumbering || ModifierKind == ModifierKind.NumberByDirectories || ModifierKind == ModifierKind.SwapOrder ||
+            else if (ModifierKind == ModifierKind.NumberByDirectories || ModifierKind == ModifierKind.SwapOrder ||
                      ModifierKind == ModifierKind.PreserveFromLeft || ModifierKind == ModifierKind.PreserveFromRight ||
                      ModifierKind == ModifierKind.TrimFromLeft || ModifierKind == ModifierKind.TrimFromRight ||
                      ModifierKind == ModifierKind.ParentDirectory || ModifierKind == ModifierKind.OriginalFileName ||
@@ -58,7 +58,7 @@ namespace Zhai.Renamer.Models
                 text2 = SecondArgument;
             }
 
-            else if (ModifierKind == ModifierKind.AddMultipleNumbering ||
+            else if (ModifierKind == ModifierKind.AddNumbering || ModifierKind == ModifierKind.AddMultipleNumbering ||
                      ModifierKind == ModifierKind.Substring || ModifierKind == ModifierKind.RemoveSubstring)
             {
                 position1 = x == null || x.ToString() == "" ? 0 : Convert.ToInt32(x);
@@ -174,7 +174,7 @@ namespace Zhai.Renamer.Models
         {
             get
             {
-                return String.Format(ModifierExplainer.Explain(ModifierKind), FirstArgument, SecondArgument).Replace("位置  ", "位置 0 ").Replace("  个", " 0 个");
+                return String.Format(ModifierExplainer.Explain(ModifierKind), FirstArgument, SecondArgument).Replace("位置  ", "位置 0 ").Replace("  个", " 0 个").Replace("起始于  ", "起始于 1 ");
             }
         }
 
@@ -224,7 +224,8 @@ namespace Zhai.Renamer.Models
                         break;
 
                     case ModifierKind.AddNumbering:
-                        var number = (index + 1).CompleteZeros(max);
+                        var startIndex = position2 > 0 ? position2 - 1 : position2;
+                        var number = (index + 1 + startIndex).CompleteZeros(max + startIndex);
                         renamerFile.ModifiedName = input.AppendAtPosition(number, position1);
                         break;
 

@@ -1,5 +1,4 @@
-﻿using GongSolutions.Wpf.DragDrop;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -38,8 +37,6 @@ namespace Zhai.Renamer
             QuickModifiers = RenamerSettings.GetQuickModifiers();
             RegexFilters = RenamerSettings.GetRegexFilters();
             RenamerSettings.Load();
-
-            RenamerDropHandler = new RenamerDropHandler(ModifierManager);
         }
 
         internal ModifierManager ModifierManager { get; }
@@ -49,8 +46,6 @@ namespace Zhai.Renamer
         internal ProfileManager ProfileManager { get; }
 
         public List<RenameModifier> ModifierSettings => ModifierManager.ModifierSettings;
-
-        public RenamerDropHandler RenamerDropHandler { get; private set; }
 
         #region Properties
 
@@ -1039,34 +1034,5 @@ namespace Zhai.Renamer
         })).Value;
 
         #endregion
-    }
-
-    public class RenamerDropHandler : DefaultDropHandler
-    {
-        ModifierManager ModifierManager { get; }
-
-        internal RenamerDropHandler(ModifierManager modifierManager)
-        {
-            this.ModifierManager = modifierManager;
-        }
-
-        public override void DragOver(IDropInfo dropInfo)
-        {
-            if (((GongSolutions.Wpf.DragDrop.DropInfo)dropInfo).TargetItem is RenameModifier)
-            {
-                dropInfo.Effects = DragDropEffects.Move;
-            }
-            else
-            {
-                dropInfo.Effects = DragDropEffects.None;
-            }
-        }
-
-        public override void Drop(IDropInfo dropInfo)
-        {
-            base.Drop(dropInfo);
-
-            ModifierManager.PreviewModifier();
-        }
     }
 }

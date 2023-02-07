@@ -26,7 +26,7 @@ namespace Zhai.Renamer.Helpers
             }
             catch (SecurityException)
             {
-                error = $"当前用户对目录 {sourcePath} 没有访问权限...";
+                error = $"当前用户对文件夹 {sourcePath} 没有访问权限...";
 
                 return false;
             }

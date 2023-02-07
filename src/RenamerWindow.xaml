@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Zhai.Renamer"
-        xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:ZDY="http://www.zdyla.com/coding"   
         xmlns:Properties="clr-namespace:Zhai.Renamer.Properties"
         xmlns:Converters="clr-namespace:Zhai.Renamer.Converters"  
@@ -30,11 +29,11 @@
 
         <ContextMenu x:Key="FileListContextMenu" DataContext="{Binding RenamerWindow, Source={StaticResource Locator}}">
             <MenuItem Header="追加文件" Icon="{ZDY:Icon Kind=ArchiveAdd}" Command="{Binding ExecuteAddRenameNodeToListCommand}" CommandParameter="File"/>
-            <MenuItem Header="追加目录" Icon="{ZDY:Icon Kind=FolderAdd}" Command="{Binding ExecuteAddRenameNodeToListCommand}" CommandParameter="Directory"/>
+            <MenuItem Header="追加文件夹" Icon="{ZDY:Icon Kind=FolderAdd}" Command="{Binding ExecuteAddRenameNodeToListCommand}" CommandParameter="Directory"/>
             <MenuItem Header="递归加载" Command="{Binding ExecuteReloadRenameNodeListCommand}" IsCheckable="True" IsChecked="{Binding IsRecursiveLoad}"/>
             <Separator/>
             <MenuItem Header="过滤选项" Icon="{ZDY:Icon Kind=VuesaxOutlineFilterAdd}">
-                <MenuItem Header="包含目录" Command="{Binding ExecuteReloadRenameNodeListCommand}" IsCheckable="True" IsChecked="{Binding IsRenameNodeContainDirectory}"/>
+                <MenuItem Header="包含文件夹" Command="{Binding ExecuteReloadRenameNodeListCommand}" IsCheckable="True" IsChecked="{Binding IsRenameNodeContainDirectory}"/>
                 <MenuItem Header="包含文件" Command="{Binding ExecuteReloadRenameNodeListCommand}" IsCheckable="True" IsChecked="{Binding IsRenameNodeListContainFile}"/>
                 <Separator/>
                 <MenuItem Header="字符过滤" Icon="{ZDY:Icon Kind=VuesaxOutlineDocumentFilter}" ItemsSource="{Binding RegexFilters}">
@@ -138,8 +137,9 @@
                 </Grid.IsEnabled>
 
                 <Border Grid.Row="0" Grid.ColumnSpan="2" Padding="0 24 0 12">
-                    <ZDY:TextBox ZDY:TextBoxExtension.Placeholder="待命名字符串过滤正则表达式 ..." 
+                    <ZDY:TextBox ZDY:TextBoxExtension.Placeholder="文件名过滤正则表达式 ..." 
                                  ZDY:TextBoxExtension.Icon="Code"
+                                 ZDY:TextBoxExtension.IsClearButtonEnabled="True"
                                  Width="240" BorderThickness="1"
                                  Text="{Binding InputRegex, UpdateSourceTrigger=PropertyChanged}"
                                  VerticalAlignment="Center" HorizontalAlignment="Left">
@@ -276,7 +276,7 @@
                     <DockPanel>
                         <StackPanel DockPanel.Dock="Bottom">
                             <DockPanel Margin="0 12 0 0">
-                                <ZDY:TextBox ZDY:TextBoxExtension.Placeholder="输出结果到其他目录..." 
+                                <ZDY:TextBox ZDY:TextBoxExtension.Placeholder="输出结果到其他文件夹..." 
                                              ZDY:TextBoxExtension.IsClearButtonEnabled="True"
                                              Margin="0 0 6 0" IsReadOnly="True" Text="{Binding OutputFolderPath}">
                                     <ZDY:TextBoxExtension.AddonContent>
@@ -302,9 +302,6 @@
                         </StackPanel>
 
                         <ZDY:DataGrid ItemsSource="{Binding ModifierList}"
-                                    dd:DragDrop.IsDragSource="True"
-                                    dd:DragDrop.IsDropTarget="True"
-                                    dd:DragDrop.DropHandler="{Binding RenamerDropHandler}"
                                     CanUserAddRows="False" AutoGenerateColumns="False" GridLinesVisibility="All"
                                     CanUserSortColumns="False" SelectionMode="Single"
                                     ContextMenu="{StaticResource ModifierListContextMenu}"
@@ -395,7 +392,7 @@
                         <ZDY:Button Command="{Binding ExecuteAddRenameNodeToListCommand}" CommandParameter="Directory" VerticalContentAlignment="Center">
                             <StackPanel Orientation="Horizontal" Margin="8 -2 8 0">
                                 <ZDY:Icon Kind="FolderAdd" Width="20" Height="20" Margin="-2 2 8 0"/>
-                                <TextBlock FontSize="18">选择目录</TextBlock>
+                                <TextBlock FontSize="18">选择文件夹</TextBlock>
                             </StackPanel>
                         </ZDY:Button>
                     </StackPanel>

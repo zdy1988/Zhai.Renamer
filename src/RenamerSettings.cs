@@ -199,7 +199,7 @@ namespace Zhai.Renamer
                 //注册到所有文件
                 RegisterToRegistry(@"*\shell");
 
-                //注册到所有目录
+                //注册到所有文件夹
                 RegisterToRegistry(@"directory\shell");
 
                 if (isShowMessage)

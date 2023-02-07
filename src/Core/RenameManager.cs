@@ -41,7 +41,7 @@ namespace Zhai.Renamer.Core
 
             if (!isOutputToOtherDirectory && isBackup)
             {
-                //不输出到其他目录时，备份命名
+                //不输出到其他文件夹时，备份命名
                 TakePrevSnapshot();
             }
 
@@ -78,8 +78,8 @@ namespace Zhai.Renamer.Core
                 try
                 {
                     /*
-                        最先重命名地址最短的，因为短地址可能会是长地址的上级目录
-                        重命名前先查看父节点地址是否改变，如果改变则更新当前目录地址
+                        最先重命名地址最短的，因为短地址可能会是长地址的上级文件夹
+                        重命名前先查看父节点地址是否改变，如果改变则更新当前文件夹地址
                     */
 
                     var shortestPathFirstOrderedNodes = RenameNodeList.OrderBy(t => t.FullPath().Length).AsEnumerable();

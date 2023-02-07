@@ -129,13 +129,14 @@
                                 <ZDY:CheckBox Name="AddNumbering" IsChecked="{Binding ModifierSettings[8].IsUsed}"/>
                                 <TextBlock Text="在名称位置"/>
                                 <ZDY:TextNumberBox Text="{Binding ModifierSettings[8].FirstArgument}"/>
-                                <TextBlock Text="处增加编号"/>
+                                <TextBlock Text="处增加编号，起始于"/>
+                                <ZDY:TextNumberBox Text="{Binding ModifierSettings[8].SecondArgument}" ZDY:TextBoxExtension.Placeholder="1"/>
                             </DockPanel>
                             <DockPanel>
                                 <ZDY:CheckBox Name="AddNumberingByDirectory" IsChecked="{Binding ModifierSettings[9].IsUsed}"/>
                                 <TextBlock Text="在名称位置"/>
                                 <ZDY:TextNumberBox Text="{Binding ModifierSettings[9].FirstArgument}"/>
-                                <TextBlock Text="处增加编号 （基于目录）"/>
+                                <TextBlock Text="处增加基于文件夹的编号"/>
                             </DockPanel>
                             <DockPanel>
                                 <ZDY:CheckBox Name="AddNumberingMultiple" IsChecked="{Binding ModifierSettings[10].IsUsed}"/>
@@ -279,7 +280,7 @@
                                                    Text="{Binding ModifierSettings[28].FirstArgument, Converter={ZDY:FilePathToNameConverter}}" 
                                                    ToolTip="{Binding ModifierSettings[28].FirstArgument}"
                                                    Visibility="{Binding ModifierSettings[28].FirstArgument, Converter={ZDY:NullOrEmptyStringToVisibilityConverter}}"/>
-                                            <TextBlock Text="指定目录" Style="{StaticResource DialogButtonInnerText}"
+                                            <TextBlock Text="指定文件夹" Style="{StaticResource DialogButtonInnerText}"
                                                    Visibility="{Binding ElementName=AppendFromDirectoryNameTextBlock, Path=Visibility, Converter={ZDY:VisibilityToInverseVisibilityConverter}}"/>
                                         </Grid>
                                     </Button.Content>
@@ -310,7 +311,7 @@
                                 <ZDY:CheckBox Name="ParentDirectory" IsChecked="{Binding ModifierSettings[30].IsUsed}"/>
                                 <TextBlock Text="在名称位置" />
                                 <ZDY:TextNumberBox Text="{Binding ModifierSettings[30].FirstArgument}"/>
-                                <TextBlock Text="处追加其所在目录名称"/>
+                                <TextBlock Text="处追加其所在文件夹名称"/>
                             </DockPanel>
                             <DockPanel>
                                 <ZDY:CheckBox Name="OriginalFileName" IsChecked="{Binding ModifierSettings[31].IsUsed}"/>
