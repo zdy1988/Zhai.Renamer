@@ -36,9 +36,9 @@ namespace Zhai.Renamer
             return true;
         }
 
-        internal static Dictionary<String, String[]> GetCounters()
+        internal static List<RenameCounter> GetCounters()
         {
-            Dictionary<String, String[]> counters;
+            List<RenameCounter> counters;
 
             try
             {
@@ -49,15 +49,15 @@ namespace Zhai.Renamer
                     throw new ArgumentNullException(nameof(json));
                 }
 
-                counters = JsonConvert.DeserializeObject<Dictionary<String, String[]>>(json);
+                counters = JsonConvert.DeserializeObject<List<RenameCounter>>(json);
             }
             catch
             {
                 // 读取配置文件错误则创建默认文件
-                counters = new Dictionary<string, string[]>
-                {
-                    { "P", new string[] { "jpg", "jpeg", "png", "gif", "bmp", "ico", "tiff", "wmf" } },
-                    { "V", new string[] { "asf", "avi", "rmvb", "divx", "dv", "flv", "gxf", "m1v", "m2v", "m2ts", "m4v", "mkv", "mov", "mp2", "mp4", "mpeg", "mpeg1", "mpeg2", "mpeg4", "mpg", "mts", "mxf", "ogg", "ogm", "ps", "ts", "vob", "wmv", "a52", "aac", "ac3", "dts", "flac", "m4a", "m4p", "mka", "mod", "mp1", "mp2", "mp3", "ogg" } }
+                counters = new List<RenameCounter> {
+                    new RenameCounter { Flag = "D", Formats = "*DIR*", IsRecursived = false, IsUsed = true },
+                    new RenameCounter { Flag = "P", Formats = "jpg,jpeg,png,gif,bmp,ico,tiff,wmf", IsRecursived = false, IsUsed = true },
+                    new RenameCounter { Flag = "V", Formats = "asf,avi,rmvb,divx,dv,flv,gxf,m1v,m2v,m2ts,m4v,mkv,mov,mp2,mp4,mpeg,mpeg1,mpeg2,mpeg4,mpg,mts,mxf,ogg,ogm,ps,ts,vob,wmv,a52,aac,ac3,dts,flac,m4a,m4p,mka,mod,mp1,mp2,mp3,ogg", IsRecursived = false, IsUsed = true },
                 };
 
                 Settings.Default.Counters = JsonConvert.SerializeObject(counters);
@@ -68,9 +68,18 @@ namespace Zhai.Renamer
             return counters;
         }
 
-        internal static List<String[]> GetRegexFilters()
+        internal static void SaveCounters()
         {
-            List<String[]> filters;
+            var counters = App.ViewModelLocator.SettingsWindow.Counters.Where(t => !string.IsNullOrWhiteSpace(t.Flag) && !string.IsNullOrWhiteSpace(t.Formats)).ToList();
+
+            Settings.Default.Counters = JsonConvert.SerializeObject(counters);
+
+            Settings.Default.Save();
+        }
+
+        internal static List<RenameRegexFilter> GetRegexFilters()
+        {
+            List<RenameRegexFilter> filters;
 
             try
             {
@@ -81,24 +90,22 @@ namespace Zhai.Renamer
                     throw new ArgumentNullException(nameof(json));
                 }
 
-                filters = JsonConvert.DeserializeObject<List<String[]>>(json);
+                filters = JsonConvert.DeserializeObject<List<RenameRegexFilter>>(json);
             }
             catch
             {
-                filters = JsonConvert.DeserializeObject<List<String[]>>(
-                    @"[
-	                    [ '包含空格符', '\\s' ],
-	                    [ '包含整数', '^-{0,1}\\d+' ],
-	                    [ '包含年份 (1900-2099)', '((19|20)\\d{2})' ],
+                filters = new List<RenameRegexFilter> {
+                    new RenameRegexFilter { Name = "包含空格符", Regex = @"\\s" },
+                    new RenameRegexFilter { Name = "包含整数", Regex = @"^-{0,1}\\d+" },
+                    new RenameRegexFilter { Name = "包含年份 (1900-2099)", Regex = @"((19|20)\\d{2})" },
 
-	                    [ 'AVI (*.avi)', '\\.avi' ],
-	                    [ 'JPEG (*.jpg;*.jpeg)', '\\.(jpg|jpeg)' ],
-	                    [ 'MKV (*.mkv)', '\\.mkv' ],
-	                    [ 'MP4 (*.mp4)', '\\.mp4' ],
-	                    [ 'PNG (*.png)', '\\.png' ],
-	                    [ 'SRT (*.srt)', '\\.srt' ]
-                    ]");
-
+                    new RenameRegexFilter { Name = "AVI (*.avi)", Regex = @"\\.avi" },
+                    new RenameRegexFilter { Name = "JPEG (*.jpg;*.jpeg)", Regex = @"\\.(jpg|jpeg)" },
+                    new RenameRegexFilter { Name = "MKV (*.mkv)", Regex = @"\\.mkv" },
+                    new RenameRegexFilter { Name = "MP4 (*.mp4)", Regex = @"\\.mp4" },
+                    new RenameRegexFilter { Name = "PNG (*.png)", Regex = @"\\.png" },
+                    new RenameRegexFilter { Name = "SRT (*.srt)", Regex = @"\\.srt" },
+                };
 
                 Settings.Default.RegexFilters = JsonConvert.SerializeObject(filters);
 
@@ -106,6 +113,17 @@ namespace Zhai.Renamer
             }
 
             return filters;
+        }
+
+        internal static void SaveRegexFilters()
+        {
+            var regexFilters = App.ViewModelLocator.SettingsWindow.RegexFilters.Where(t => !string.IsNullOrWhiteSpace(t.Name) && !string.IsNullOrWhiteSpace(t.Regex)).ToList();
+
+            Settings.Default.RegexFilters = JsonConvert.SerializeObject(regexFilters);
+
+            Settings.Default.Save();
+
+            App.ViewModelLocator.RenamerWindow.RegexFilters = regexFilters;
         }
 
         internal static Dictionary<String, List<RenameModifier>> GetQuickModifiers()

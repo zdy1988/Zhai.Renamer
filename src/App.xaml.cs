@@ -13,5 +13,13 @@ namespace Zhai.Renamer
     /// </summary>
     public partial class App : Application
     {
+        internal static ViewModelLocator ViewModelLocator { get; private set; }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            App.ViewModelLocator = FindResource("Locator") as ViewModelLocator;
+        }
     }
 }

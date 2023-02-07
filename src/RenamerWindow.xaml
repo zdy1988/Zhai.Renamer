@@ -40,7 +40,7 @@
                 <MenuItem Header="字符过滤" Icon="{ZDY:Icon Kind=VuesaxOutlineDocumentFilter}" ItemsSource="{Binding RegexFilters}">
                     <MenuItem.ItemContainerStyle>
                         <Style TargetType="MenuItem" BasedOn="{StaticResource Zhai.Famil.MenuItem}">
-                            <Setter Property="Header" Value="{Binding [0]}"/>
+                            <Setter Property="Header" Value="{Binding Name}"/>
                             <Setter Property="Command" Value="{Binding DataContext.ExecuteSetRegexHelperCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                             <Setter Property="CommandParameter" Value="{Binding }"/>
                         </Style>
@@ -109,6 +109,12 @@
             <MenuItem Header="全部移除" Icon="{ZDY:Icon Kind=Delete}" Command="{Binding ExecuteRemoveAllModifierCommand}"/>
         </ContextMenu>
     </ZDY:GlassesWindow.Resources>
+    <ZDY:GlassesWindow.TitleBarContent>
+        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+            <ZDY:IconButton x:Name="AboutButton" Icon="About" ToolTip="关于" Click="AboutButton_Click"/>
+            <ZDY:IconButton x:Name="SettingsButton" Icon="Settings" ToolTip="设置" Click="SettingsButton_Click"/>
+        </StackPanel>
+    </ZDY:GlassesWindow.TitleBarContent>
     <Grid>
         <Grid Margin="24 0 24 24">
             <Grid.RowDefinitions>
@@ -140,8 +146,8 @@
                         <ZDY:TextBox.ContextMenu>
                             <ContextMenu ItemsSource="{Binding RegexFilters}">
                                 <ContextMenu.ItemContainerStyle>
-                                    <Style TargetType="{x:Type MenuItem}">
-                                        <Setter Property="Header" Value="{Binding [0]}"/>
+                                    <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource Zhai.Famil.MenuItem}">
+                                        <Setter Property="Header" Value="{Binding Name}"/>
                                         <Setter Property="Command" Value="{Binding DataContext.ExecuteSetRegexHelperCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                                         <Setter Property="CommandParameter" Value="{Binding }"/>
                                     </Style>

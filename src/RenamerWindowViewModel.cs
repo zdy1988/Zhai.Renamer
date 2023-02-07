@@ -81,8 +81,8 @@ namespace Zhai.Renamer
             }
         }
 
-        private List<String[]> regexFilters;
-        public List<String[]> RegexFilters
+        private List<RenameRegexFilter> regexFilters;
+        public List<RenameRegexFilter> RegexFilters
         {
             get { return regexFilters; }
             set { Set(() => RegexFilters, ref regexFilters, value); }
@@ -738,11 +738,11 @@ namespace Zhai.Renamer
 
         #region Commands
 
-        public RelayCommand<String[]> ExecuteSetRegexHelperCommand => new Lazy<RelayCommand<String[]>>(() => new RelayCommand<String[]>((regexHelper) =>
+        public RelayCommand<RenameRegexFilter> ExecuteSetRegexHelperCommand => new Lazy<RelayCommand<RenameRegexFilter>>(() => new RelayCommand<RenameRegexFilter>((regexFilter) =>
         {
-            if (regexHelper != null && regexHelper.Length == 2 && !String.IsNullOrWhiteSpace(regexHelper[0]))
+            if (regexFilter != null)
             {
-                InputRegex = regexHelper[1];
+                InputRegex = regexFilter.Regex;
             }
 
             IsBackuped = false;

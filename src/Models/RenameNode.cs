@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -283,37 +284,42 @@ namespace Zhai.Renamer.Models
 
         public void CountedFileQuantity()
         {
-            PathNode node = new PathNode(FullPath());
+            var node = new PathNode(FullPath());
 
             if (node.IsDirectory)
             {
-                StringBuilder builder = new StringBuilder();
+                var builder = new StringBuilder();
 
-                void CountedT()
+                var counters = RenamerSettings.GetCounters();
+
+                void CountingDir()
                 {
-                    var tCount = node.GetDirectories().Count();
+                    var counter = counters.FirstOrDefault(t => t.IsDIR && t.IsUsed);
 
-                    if (tCount > 0)
+                    if (counter != null)
                     {
-                        builder.Append($"{tCount}T");
+                        var tCount = node.GetDirectories(counter.IsRecursived).Count();
+
+                        if (tCount > 0)
+                        {
+                            builder.Append($"{tCount}{counter.Flag}");
+                        }
                     }
                 }
 
-                void CountedQuantity()
+                void CountingQuantity()
                 {
-                    var counters = RenamerSettings.GetCounters();
-
                     if (counters.Any())
                     {
                         long length = 0;
 
-                        foreach (var counter in counters)
+                        foreach (var counter in counters.Where(t => !t.IsDIR && t.IsUsed))
                         {
-                            var files = node.GetFiles(counter.Value, true).ToList();
+                            var files = node.GetFiles(counter.Formats.Split(","), counter.IsRecursived).ToList();
 
                             if (files.Any())
                             {
-                                builder.Append($"{files.Count}{counter.Key}");
+                                builder.Append($"{files.Count}{counter.Flag}");
 
                                 foreach (var file in files)
                                 {
@@ -329,18 +335,8 @@ namespace Zhai.Renamer.Models
                     }
                 }
 
-                //if (node.IsCollection())
-                //{
-                //    CountedT();
-
-                //    CountedQuantity();
-                //}
-                //else if (node.IsDirectory)
-                //{
-                //    CountedQuantity();
-                //}
-
-                CountedQuantity();
+                CountingDir();
+                CountingQuantity();
 
                 FileQuantity = builder.ToString();
             }
@@ -366,9 +362,13 @@ namespace Zhai.Renamer.Models
             {
                 outFileSize = String.Format("{0}GB", fileSize / (1024 * 1024 * 1024));
             }
+            else if (fileSize < 1024 * 1024 * 1024 * 1024L * 1024L)
+            {
+                outFileSize = String.Format("{0}TB", fileSize / (1024 * 1024 * 1024 * 1024L));
+            }
             else
             {
-                outFileSize = String.Format("{0}TB", fileSize / (1024 * 1024 * 1024));
+                outFileSize = String.Format("{0}PB", fileSize / (1024 * 1024 * 1024 * 1024L * 1024L));
             }
 
             return outFileSize;

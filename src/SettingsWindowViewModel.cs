@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Zhai.Famil.Common.Mvvm;
+using Zhai.Famil.Common.Mvvm.Command;
+using Zhai.Renamer.Models;
 using Zhai.Renamer.Properties;
 
 namespace Zhai.Renamer
@@ -74,5 +78,47 @@ namespace Zhai.Renamer
                 }
             }
         }
+
+        private ObservableCollection<RenameCounter> counters = new ObservableCollection<RenameCounter>(RenamerSettings.GetCounters());
+        public ObservableCollection<RenameCounter> Counters
+        {
+            get { return counters; }
+            set { Set(() => Counters, ref counters, value); }
+        }
+
+        private ObservableCollection<RenameRegexFilter> regexFilters = new ObservableCollection<RenameRegexFilter>(RenamerSettings.GetRegexFilters());
+        public ObservableCollection<RenameRegexFilter> RegexFilters
+        {
+            get { return regexFilters; }
+            set { Set(() => RegexFilters, ref regexFilters, value); }
+        }
+
+        #region Commands
+
+        public RelayCommand<RenameCounter> ExecuteRemoveCounterCommand => new Lazy<RelayCommand<RenameCounter>>(() => new RelayCommand<RenameCounter>((counter) =>
+        {
+            counters.Remove(counter);
+
+        })).Value;
+
+        public RelayCommand ExecuteAddCounterCommand => new Lazy<RelayCommand>(() => new RelayCommand(() =>
+        {
+            counters.Add(new RenameCounter());
+
+        })).Value;
+
+        public RelayCommand<RenameRegexFilter> ExecuteRemoveRegexFilterCommand => new Lazy<RelayCommand<RenameRegexFilter>>(() => new RelayCommand<RenameRegexFilter>((regexFilter) =>
+        {
+            RegexFilters.Remove(regexFilter);
+
+        })).Value;
+
+        public RelayCommand ExecuteAddRegexFilterCommand => new Lazy<RelayCommand>(() => new RelayCommand(() =>
+        {
+            RegexFilters.Add(new RenameRegexFilter());
+
+        })).Value;
+
+        #endregion
     }
 }

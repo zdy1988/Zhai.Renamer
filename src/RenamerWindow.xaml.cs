@@ -48,5 +48,25 @@ namespace Zhai.Renamer
                 ViewModel.Cleanup();
             };
         }
+
+        private void AboutButton_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new AboutWindow
+            {
+                Owner = App.Current.MainWindow
+            };
+
+            window.ShowDialog();
+        }
+
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new SettingsWindow
+            {
+                Owner = App.Current.MainWindow
+            };
+
+            window.ShowDialog();
+        }
     }
 }
