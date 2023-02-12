@@ -15,11 +15,21 @@ namespace Zhai.Renamer
     {
         internal static ViewModelLocator ViewModelLocator { get; private set; }
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
-
             App.ViewModelLocator = FindResource("Locator") as ViewModelLocator;
+
+            if (e.Args.Any())
+            {
+                var nodes = e.Args.Select(t => new Models.PathNode(t)).Where(t => !t.IsLost);
+
+                if (nodes.Any())
+                {
+                    await App.ViewModelLocator.RenamerWindow.AddRenameNodeToListAsync(e.Args.Select(t => new Models.PathNode(t)));
+                }
+            }
+
+            base.OnStartup(e);
         }
     }
 }

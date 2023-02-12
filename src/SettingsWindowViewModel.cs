@@ -56,25 +56,25 @@ namespace Zhai.Renamer
             }
         }
 
-        private bool isAddToWindowsContextMenu;
-        public bool IsAddToWindowsContextMenu
+        private bool isRegisterAtWindowsContextMenu = Settings.Default.IsRegisterAtWindowsContextMenu;
+        public bool IsRegisterAtWindowsContextMenu
         {
-            get { return isAddToWindowsContextMenu; }
+            get { return isRegisterAtWindowsContextMenu; }
             set
             {
-                if (Set(() => IsAddToWindowsContextMenu, ref isAddToWindowsContextMenu, value))
+                if (Set(() => IsRegisterAtWindowsContextMenu, ref isRegisterAtWindowsContextMenu, value))
                 {
-                    Settings.Default.IsAddToWindowsContextMenu = value;
-                    Settings.Default.Save();
-
                     if (value)
                     {
-                        RenamerSettings.RegistryRightClickContextMenu();
+                        value = RenamerSettings.RegistryWindowsContextMenu();
                     }
-                    else
+                    else if(RenamerSettings.IsRegistryWindowsContextMenu())
                     {
-                        RenamerSettings.UnRegistryRightClickContextMenu();
+                        RenamerSettings.UnRegistryWindowsContextMenu();
                     }
+
+                    Settings.Default.IsRegisterAtWindowsContextMenu = value;
+                    Settings.Default.Save();
                 }
             }
         }

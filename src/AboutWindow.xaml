@@ -12,7 +12,7 @@
         TitleBarVisibility="Collapsed"
         ShowInTaskbar="False"
         ResizeMode="NoResize"
-        Width="432" Height="310"
+        Width="432" Height="270"
         mc:Ignorable="d">
     <Border>
         <Grid Margin="24">

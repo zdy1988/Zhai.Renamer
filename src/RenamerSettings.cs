@@ -21,9 +21,9 @@ namespace Zhai.Renamer
         {
             try
             {
-                if (Settings.Default.IsAddToWindowsContextMenu && !IsRegistryRightClickContextMenu())
+                if (Settings.Default.IsRegisterAtWindowsContextMenu && !IsRegistryWindowsContextMenu())
                 {
-                    RegistryRightClickContextMenu(false);
+                    RegistryWindowsContextMenu(false);
                 }
             }
             catch (Exception e)
@@ -188,11 +188,11 @@ namespace Zhai.Renamer
 
         #region Registry
 
-        internal static string RegistryKey = "Zhai.Renamer";
+        internal static string RegistryKey = "ZHAI.RENAME";
 
-        internal static string RegistryMenu = "使用 Zhai.Renamer 进行高级重命名";
+        internal static string RegistryMenu = $"使用 {RegistryKey} 进行重命名";
 
-        internal static bool RegistryRightClickContextMenu(bool isShowMessage = true)
+        internal static bool RegistryWindowsContextMenu(bool isShowMessage = true)
         {
             try
             {
@@ -213,7 +213,16 @@ namespace Zhai.Renamer
             {
                 if (isShowMessage)
                 {
-                    MessageBox.Show("权限不足！请使用管理员的身份重新打开程序！");
+                    MessageBox.Show("请使用管理员的身份重新打开程序！", "权限不足");
+                }
+
+                return false;
+            }
+            catch (System.UnauthorizedAccessException)
+            {
+                if (isShowMessage)
+                {
+                    MessageBox.Show("请使用管理员的身份重新打开程序！", "权限不足");
                 }
 
                 return false;
@@ -245,12 +254,12 @@ namespace Zhai.Renamer
             // 设置名称
             custom.SetValue(string.Empty, RegistryMenu);
             // 设置Icon，可以是图片路径
-            custom.SetValue("icon", Process.GetCurrentProcess().MainModule.FileName);
+            custom.SetValue("icon", Environment.ProcessPath);
             // 设置选择范围：
             // Single：右击单个文件
             // Document：最多选15个文件
             // Player：看文档，相当于没限制
-            custom.SetValue("MultiSelectModel", "Player");
+            custom.SetValue("MultiSelectModel", "Single");
 
             RegistryKey cmd;
 
@@ -265,14 +274,14 @@ namespace Zhai.Renamer
 
             //Assembly.GetExecutingAssembly().Location 是本程序自身的路径
             //%1 是传入打开的文件路径
-            cmd.SetValue(string.Empty, Process.GetCurrentProcess().MainModule.FileName + " %1");
+            cmd.SetValue(string.Empty, Environment.ProcessPath + " %1");
 
             cmd.Close();
             custom.Close();
             shell.Close();
         }
 
-        internal static bool UnRegistryRightClickContextMenu(bool isShowMessage = true)
+        internal static bool UnRegistryWindowsContextMenu(bool isShowMessage = true)
         {
             try
             {
@@ -295,7 +304,16 @@ namespace Zhai.Renamer
             {
                 if (isShowMessage)
                 {
-                    MessageBox.Show("权限不足！请使用管理员的身份重新打开程序！");
+                    MessageBox.Show("请使用管理员的身份重新打开程序！", "权限不足");
+                }
+
+                return false;
+            }
+            catch (System.UnauthorizedAccessException)
+            {
+                if (isShowMessage)
+                {
+                    MessageBox.Show("请使用管理员的身份重新打开程序！", "权限不足");
                 }
 
                 return false;
@@ -308,7 +326,7 @@ namespace Zhai.Renamer
             }
         }
 
-        internal static bool IsRegistryRightClickContextMenu()
+        internal static bool IsRegistryWindowsContextMenu()
         {
             bool isRegistry = false;
 

@@ -110,12 +110,12 @@ namespace Zhai.Renamer.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool IsAddToWindowsContextMenu {
+        public bool IsRegisterAtWindowsContextMenu {
             get {
-                return ((bool)(this["IsAddToWindowsContextMenu"]));
+                return ((bool)(this["IsRegisterAtWindowsContextMenu"]));
             }
             set {
-                this["IsAddToWindowsContextMenu"] = value;
+                this["IsRegisterAtWindowsContextMenu"] = value;
             }
         }
         

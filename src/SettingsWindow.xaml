@@ -28,6 +28,14 @@
                             <ZDY:CheckBox IsChecked="{Binding IsWindowTransparency}"/>
                             <TextBlock Margin="8 0" Text="是否使用透明窗体"/>
                         </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0 0 0 12">
+                            <ZDY:CheckBox IsChecked="{Binding IsSaveLastProfile}"/>
+                            <TextBlock Margin="8 0" Text="退出时，保存最后一次使用过的规则"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0 0 0 12">
+                            <ZDY:CheckBox IsChecked="{Binding IsRegisterAtWindowsContextMenu}"/>
+                            <TextBlock Margin="8 0" Text="注册到 Windows 右键菜单"/>
+                        </StackPanel>
                     </StackPanel>
                 </ZDY:TabItem>
                 <ZDY:TabItem Header="文件计数">
