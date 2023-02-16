@@ -277,7 +277,7 @@ namespace Zhai.Renamer
 
                 ModifierManager.PreviewModifier();
 
-                this.PublishNotificationMessage("命名已完成！");
+                this.SendNotificationMessage("命名已完成！");
             });
         }
 
@@ -937,7 +937,7 @@ namespace Zhai.Renamer
                 }
                 else
                 {
-                    this.PublishNotificationMessage("某些文件名无效，请在重命名之前更正它们！");
+                    this.SendNotificationMessage("某些文件名无效，请在重命名之前更正它们！");
                 }
             }
 
@@ -984,7 +984,7 @@ namespace Zhai.Renamer
                 }
                 else
                 {
-                    PublishNotificationMessage($"软件对路径：“{filename}”没有访问权限！");
+                    SendNotificationMessage($"软件对路径：“{filename}”没有访问权限！");
                 }
             }
 

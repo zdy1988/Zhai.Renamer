@@ -5,7 +5,7 @@ namespace Zhai.Renamer
 {
     internal partial class RenamerWindowViewModel : ViewModelBase
     {
-        public void PublishNotificationMessage(string message)
+        public void SendNotificationMessage(string message)
         {
             if (!String.IsNullOrWhiteSpace(message))
             {

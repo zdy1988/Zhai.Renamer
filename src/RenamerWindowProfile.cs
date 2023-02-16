@@ -55,12 +55,12 @@ namespace Zhai.Renamer
             {
                 if (ProfileManager.TryUpdateProfile(SelectedProfile, ModifierList, out string message))
                 {
-                    this.PublishNotificationMessage("规则保存完成！");
+                    this.SendNotificationMessage("规则保存完成！");
 
                     return;
                 }
 
-                this.PublishNotificationMessage(message);
+                this.SendNotificationMessage(message);
             }
             else
             {
@@ -78,17 +78,17 @@ namespace Zhai.Renamer
                 {
                     if (ProfileManager.TryAddProfile(this.ProfileName, ModifierList, out string message))
                     {
-                        this.PublishNotificationMessage("规则保存完成！");
+                        this.SendNotificationMessage("规则保存完成！");
 
                         return;
                     }
 
-                    this.PublishNotificationMessage(message);
+                    this.SendNotificationMessage(message);
                 }
             }
             else
             {
-                this.PublishNotificationMessage("未发现待保存规则条目！");
+                this.SendNotificationMessage("未发现待保存规则条目！");
             }
         }
 
@@ -104,12 +104,12 @@ namespace Zhai.Renamer
                     {
                         if (ProfileManager.TryAddProfile(this.ProfileName, ModifierList, out message))
                         {
-                            this.PublishNotificationMessage("规则保存完成！");
+                            this.SendNotificationMessage("规则保存完成！");
 
                             return;
                         }
 
-                        this.PublishNotificationMessage(message);
+                        this.SendNotificationMessage(message);
                     }
                 }
             }
@@ -125,12 +125,12 @@ namespace Zhai.Renamer
                     {
                         SelectedProfile = null;
 
-                        this.PublishNotificationMessage("规则已删除！");
+                        this.SendNotificationMessage("规则已删除！");
 
                         return;
                     }
 
-                    this.PublishNotificationMessage(message);
+                    this.SendNotificationMessage(message);
                 }
             }
         }
