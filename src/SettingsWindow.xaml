@@ -53,7 +53,7 @@
                                     </DataGridTemplateColumn.CellTemplate>
                                     <DataGridTemplateColumn.CellEditingTemplate>
                                         <DataTemplate>
-                                            <ZDY:TextBox Text="Flag" Margin="-2" Padding="4 2"/>
+                                            <ZDY:TextBox Text="{Binding Flag}" Margin="-2" Padding="4 2"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellEditingTemplate>
                                 </DataGridTemplateColumn>
@@ -134,7 +134,7 @@
                                     </DataGridTemplateColumn.CellTemplate>
                                     <DataGridTemplateColumn.CellEditingTemplate>
                                         <DataTemplate>
-                                            <ZDY:TextBox Text="Regex" Margin="-2" Padding="4 2"/>
+                                            <ZDY:TextBox Text="{Binding Regex}" Margin="-2" Padding="4 2"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellEditingTemplate>
                                 </DataGridTemplateColumn>
