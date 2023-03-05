@@ -767,9 +767,9 @@ namespace Zhai.Renamer
             }
             else
             {
-                if (Zhai.Famil.Win32.CommonDialog.OpenFolderDialog(out string filename))
+                if (Zhai.Famil.Win32.CommonDialog.OpenMultiFolderDialog(out string[] filenames))
                 {
-                    var dirPathNodeList = new List<PathNode> { new PathNode(filename) };
+                    var dirPathNodeList = filenames.Select(fileName => new PathNode(fileName)).ToList();
 
                     await AddRenameNodeToListAsync(dirPathNodeList);
                 }

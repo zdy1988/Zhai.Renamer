@@ -11,7 +11,7 @@
 
 	<PropertyGroup>
 		<Title>ZHAI RENAME</Title>
-		<Version>1.0.0.0</Version>
+		<Version>1.0.0.1</Version>
 		<Authors>ZDY</Authors>
 		<Copyright>Copyright © 2023 ZDY 保留所有权利。</Copyright>
 		<Description>诞生于我（ZDY）的个人兴趣，我会在有限的时间里维护这个软件。如果在使用的过程中发现什么BUG，欢迎发送描述信息和图片到我的邮箱，也可以在我的GitHub上留言，我会尽力改进软件...</Description>
@@ -46,7 +46,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-		<PackageReference Include="Zhai.Famil" Version="1.2.11" />
+		<PackageReference Include="Zhai.Famil" Version="1.3.6" />
 	</ItemGroup>
 
 	<ItemGroup>

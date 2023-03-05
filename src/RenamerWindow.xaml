@@ -392,7 +392,7 @@
                         <ZDY:Button Command="{Binding ExecuteAddRenameNodeToListCommand}" CommandParameter="Directory" VerticalContentAlignment="Center">
                             <StackPanel Orientation="Horizontal" Margin="8 -2 8 0">
                                 <ZDY:Icon Kind="FolderAdd" Width="20" Height="20" Margin="-2 2 8 0"/>
-                                <TextBlock FontSize="18">选择文件夹</TextBlock>
+                                <TextBlock FontSize="18">选择目录</TextBlock>
                             </StackPanel>
                         </ZDY:Button>
                     </StackPanel>
