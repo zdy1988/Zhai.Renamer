@@ -30,6 +30,10 @@
                 ModifierKind.TrimFromRight => "去掉名称右边 {0} 个字符",
                 ModifierKind.Substring => "从名称位置 {0} 处保留 {1} 个字符",
                 ModifierKind.RemoveSubstring => "从位置 {0} 处去掉 {1} 个字符",
+                ModifierKind.PreserveFromLeftCharacter => "保留某个 {0} 左边的 {1} 个字符",
+                ModifierKind.PreserveFromRightCharacter => "保留某个 {0} 右边的 {1} 个字符",
+                ModifierKind.TrimFromLeftCharacter => "去掉某个 {0} 左边的 {1} 个字符",
+                ModifierKind.TrimFromRightCharacter => "去掉某个 {0} 右边的 {1} 个字符",
 
                 ModifierKind.Regex => "只保留匹配 '{0}' 的名称",
                 ModifierKind.RegexReplace => "将名称匹配 '{0}' 的字符替换为 '{1}'",

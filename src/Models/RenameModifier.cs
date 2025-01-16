@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
+using Zhai.Famil.Common.ExtensionMethods;
 using Zhai.Famil.Common.Mvvm;
 using Zhai.Renamer.Core;
 
@@ -36,7 +37,8 @@ namespace Zhai.Renamer.Models
 
             else if (ModifierKind == ModifierKind.AppendAtPosition ||
                      ModifierKind == ModifierKind.AppendFromDirectory || ModifierKind == ModifierKind.AppendFromTextFile ||
-                     ModifierKind == ModifierKind.AppendCountingFileQuantity || ModifierKind == ModifierKind.AppendCountingCreationTime || ModifierKind == ModifierKind.AppendCountingModifiedTime)
+                     ModifierKind == ModifierKind.AppendCountingFileQuantity || ModifierKind == ModifierKind.AppendCountingCreationTime || ModifierKind == ModifierKind.AppendCountingModifiedTime ||
+                     ModifierKind == ModifierKind.PreserveFromLeftCharacter || ModifierKind == ModifierKind.PreserveFromRightCharacter || ModifierKind == ModifierKind.TrimFromLeftCharacter || ModifierKind == ModifierKind.TrimFromRightCharacter)
             {
                 text1 = FirstArgument;
                 position1 = y == null || y.ToString() == "" ? 0 : Convert.ToInt32(y);
@@ -312,13 +314,51 @@ namespace Zhai.Renamer.Models
                         break;
 
                     case ModifierKind.Substring:
-                        renamerFile.ModifiedName = input.TrimLeft(position1).KeepLeft(position2);
+                        renamerFile.ModifiedName = position2 != 0 ? input.TrimLeft(position1).KeepLeft(position2) : input.TrimLeft(position1);
                         break;
 
                     case ModifierKind.RemoveSubstring:
                         var partA = input.KeepLeft(position1);
                         var partB = input.TrimLeft(position1 + position2);
                         renamerFile.ModifiedName = partA + partB;
+                        break;
+
+                    case ModifierKind.PreserveFromLeftCharacter:
+                        var charIndex = text1.IsNullOrEmpty() ? -1 : input.IndexOf(text1);
+                        if (charIndex != -1)
+                        {
+                            var sub = input.Substring(charIndex + 1);
+                            renamerFile.ModifiedName = position1 == 0 ? sub : sub.KeepLeft(position1);
+                        }
+                        break;
+
+                    case ModifierKind.PreserveFromRightCharacter:
+                        charIndex = text1.IsNullOrEmpty() ? -1 : input.IndexOf(text1);
+                        if (charIndex != -1)
+                        {
+                            var sub = input.Substring(0, charIndex);
+                            renamerFile.ModifiedName = position1 == 0 ? sub : sub.KeepRight(position1);
+                        }
+                        break;
+
+                    case ModifierKind.TrimFromLeftCharacter:
+                        charIndex = text1.IsNullOrEmpty() ? -1 : input.IndexOf(text1);
+                        if (charIndex != -1)
+                        {
+                            var sub = input.Substring(0, charIndex + 1);
+                            var sub2 = input.Substring(charIndex + 1);
+                            renamerFile.ModifiedName = position1 == 0 ? sub : sub + sub2.TrimLeft(position1);
+                        }
+                        break;
+
+                    case ModifierKind.TrimFromRightCharacter:
+                        charIndex = text1.IsNullOrEmpty() ? -1 : input.IndexOf(text1);
+                        if (charIndex != -1)
+                        {
+                            var sub = input.Substring(0, charIndex);
+                            var sub2 = input.Substring(charIndex);
+                            renamerFile.ModifiedName = position1 == 0 ? sub2 : sub.TrimRight(position1) + sub2;
+                        }
                         break;
 
                     case ModifierKind.CapitalizeEachWord:

@@ -29,7 +29,7 @@ namespace Zhai.Renamer
         {
             if (Zhai.Famil.Win32.CommonDialog.OpenFolderDialog(out string filename))
             {
-                ViewModel.ModifierSettings[29].FirstArgument = filename;
+                ViewModel.ModifierSettings[33].FirstArgument = filename;
             }
         }
 
@@ -37,7 +37,7 @@ namespace Zhai.Renamer
         {
             if (Zhai.Famil.Win32.CommonDialog.OpenFileDialog("文本文件(*.txt)|*.txt", out string filename))
             {
-                ViewModel.ModifierSettings[30].FirstArgument = filename;
+                ViewModel.ModifierSettings[34].FirstArgument = filename;
             }
         }
     }

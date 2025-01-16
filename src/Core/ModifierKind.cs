@@ -34,6 +34,11 @@
         Substring,
         RemoveSubstring,
 
+        PreserveFromLeftCharacter,
+        PreserveFromRightCharacter,
+        TrimFromLeftCharacter,
+        TrimFromRightCharacter,
+
         Regex,
         RegexReplace,
         ReplaceString,
