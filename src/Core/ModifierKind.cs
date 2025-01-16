@@ -21,6 +21,7 @@
         AddMultipleNumbering,
         SwapOrder,
 
+        keepChinese,
         KeepNumeric,
         KeepAlphanumeric,
         RemoveInvalidCharacters,

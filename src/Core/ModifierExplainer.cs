@@ -20,6 +20,7 @@
                 ModifierKind.AddMultipleNumbering => "在名称位置 {0} 处增加 {1} 个编号",
                 ModifierKind.SwapOrder => "在名称位置 {0} 处增加编号（基偶行交换）",
 
+                ModifierKind.keepChinese => "只保留名称中的中文字符",
                 ModifierKind.KeepNumeric => "只保留名称中的数字字符",
                 ModifierKind.KeepAlphanumeric => "只保留名称中的字母、数字和空格符",
                 ModifierKind.RemoveInvalidCharacters => "去掉除空格、句点(.)、at符号(@)和连字符(-)以外的标点字符",

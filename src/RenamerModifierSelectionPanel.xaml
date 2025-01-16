@@ -158,55 +158,59 @@
 
                         <StackPanel Margin="0,8">
                             <DockPanel>
-                                <ZDY:CheckBox Name="KeepNumericCharacters" IsChecked="{Binding ModifierSettings[12].IsUsed}"/>
+                                <ZDY:CheckBox Name="KeepChineseCharacters" IsChecked="{Binding ModifierSettings[12].IsUsed}"/>
+                                <TextBlock Text="只保留名称中的中文字符"/>
+                            </DockPanel>
+                            <DockPanel>
+                                <ZDY:CheckBox Name="KeepNumericCharacters" IsChecked="{Binding ModifierSettings[13].IsUsed}"/>
                                 <TextBlock Text="只保留名称中的数字字符"/>
                             </DockPanel>
                             <DockPanel>
-                                <ZDY:CheckBox Name="KeepAlphanumericCharacters" IsChecked="{Binding ModifierSettings[13].IsUsed}"/>
+                                <ZDY:CheckBox Name="KeepAlphanumericCharacters" IsChecked="{Binding ModifierSettings[14].IsUsed}"/>
                                 <TextBlock Text="只保留名称中的字母、数字和空格符"/>
                             </DockPanel>
                             <DockPanel>
-                                <ZDY:CheckBox Name="RemoveInvalidCharacters" IsChecked="{Binding ModifierSettings[14].IsUsed}"/>
+                                <ZDY:CheckBox Name="RemoveInvalidCharacters" IsChecked="{Binding ModifierSettings[15].IsUsed}"/>
                                 <TextBlock Text="去掉除空格、句点(.)、at符号(@)和连字符(-)以外的标点字符"/>
                             </DockPanel>
                             <DockPanel>
-                                <ZDY:CheckBox Name="PreserveFromLeft" IsChecked="{Binding ModifierSettings[15].IsUsed}"/>
+                                <ZDY:CheckBox Name="PreserveFromLeft" IsChecked="{Binding ModifierSettings[16].IsUsed}"/>
                                 <TextBlock Text="保留名称左边"/>
-                                <ZDY:TextNumberBox Text="{Binding ModifierSettings[15].FirstArgument}"/>
-                                <TextBlock Text="个字符"/>
-                            </DockPanel>
-                            <DockPanel>
-                                <ZDY:CheckBox Name="PreserveFromRight" IsChecked="{Binding ModifierSettings[16].IsUsed}"/>
-                                <TextBlock Text="保留名称右边"/>
                                 <ZDY:TextNumberBox Text="{Binding ModifierSettings[16].FirstArgument}"/>
                                 <TextBlock Text="个字符"/>
                             </DockPanel>
                             <DockPanel>
-                                <ZDY:CheckBox Name="TrimFromLeft" IsChecked="{Binding ModifierSettings[17].IsUsed}"/>
-                                <TextBlock Text="去掉名称左边"/>
+                                <ZDY:CheckBox Name="PreserveFromRight" IsChecked="{Binding ModifierSettings[17].IsUsed}"/>
+                                <TextBlock Text="保留名称右边"/>
                                 <ZDY:TextNumberBox Text="{Binding ModifierSettings[17].FirstArgument}"/>
                                 <TextBlock Text="个字符"/>
                             </DockPanel>
                             <DockPanel>
-                                <ZDY:CheckBox Name="TrimFromRight" IsChecked="{Binding ModifierSettings[18].IsUsed}"/>
-                                <TextBlock Text="去掉名称右边"/>
+                                <ZDY:CheckBox Name="TrimFromLeft" IsChecked="{Binding ModifierSettings[18].IsUsed}"/>
+                                <TextBlock Text="去掉名称左边"/>
                                 <ZDY:TextNumberBox Text="{Binding ModifierSettings[18].FirstArgument}"/>
                                 <TextBlock Text="个字符"/>
                             </DockPanel>
                             <DockPanel>
-                                <ZDY:CheckBox Name="ExtractSubstring" IsChecked="{Binding ModifierSettings[19].IsUsed}"/>
-                                <TextBlock Text="从名称位置"/>
+                                <ZDY:CheckBox Name="TrimFromRight" IsChecked="{Binding ModifierSettings[19].IsUsed}"/>
+                                <TextBlock Text="去掉名称右边"/>
                                 <ZDY:TextNumberBox Text="{Binding ModifierSettings[19].FirstArgument}"/>
-                                <TextBlock Text="处保留"/>
-                                <ZDY:TextNumberBox Text="{Binding ModifierSettings[19].SecondArgument}"/>
                                 <TextBlock Text="个字符"/>
                             </DockPanel>
                             <DockPanel>
-                                <ZDY:CheckBox Name="RemoveSubstring" IsChecked="{Binding ModifierSettings[20].IsUsed}"/>
-                                <TextBlock Text="从位置"/>
+                                <ZDY:CheckBox Name="ExtractSubstring" IsChecked="{Binding ModifierSettings[20].IsUsed}"/>
+                                <TextBlock Text="从名称位置"/>
                                 <ZDY:TextNumberBox Text="{Binding ModifierSettings[20].FirstArgument}"/>
-                                <TextBlock Text="处去掉"/>
+                                <TextBlock Text="处保留"/>
                                 <ZDY:TextNumberBox Text="{Binding ModifierSettings[20].SecondArgument}"/>
+                                <TextBlock Text="个字符"/>
+                            </DockPanel>
+                            <DockPanel>
+                                <ZDY:CheckBox Name="RemoveSubstring" IsChecked="{Binding ModifierSettings[21].IsUsed}"/>
+                                <TextBlock Text="从位置"/>
+                                <ZDY:TextNumberBox Text="{Binding ModifierSettings[21].FirstArgument}"/>
+                                <TextBlock Text="处去掉"/>
+                                <ZDY:TextNumberBox Text="{Binding ModifierSettings[21].SecondArgument}"/>
                                 <TextBlock Text="个字符"/>
                             </DockPanel>
                         </StackPanel>
@@ -215,31 +219,31 @@
 
                         <StackPanel Margin="0,8">
                             <DockPanel>
-                                <ZDY:CheckBox Name="RegexMatch" IsChecked="{Binding ModifierSettings[21].IsUsed}"/>
+                                <ZDY:CheckBox Name="RegexMatch" IsChecked="{Binding ModifierSettings[22].IsUsed}"/>
                                 <TextBlock Text="只保留匹配"/>
-                                <ZDY:TextBox Width="120" Text="{Binding ModifierSettings[21].FirstArgument, UpdateSourceTrigger=PropertyChanged}" ZDY:TextBoxExtension.Placeholder="正则表达式"/>
+                                <ZDY:TextBox Width="120" Text="{Binding ModifierSettings[22].FirstArgument, UpdateSourceTrigger=PropertyChanged}" ZDY:TextBoxExtension.Placeholder="正则表达式"/>
                                 <TextBlock Text="的名称"/>
                             </DockPanel>
                             <DockPanel>
-                                <ZDY:CheckBox Name="RegexReplace" IsChecked="{Binding ModifierSettings[22].IsUsed}"/>
+                                <ZDY:CheckBox Name="RegexReplace" IsChecked="{Binding ModifierSettings[23].IsUsed}"/>
                                 <TextBlock Text="将名称匹配"/>
-                                <ZDY:TextBox Width="120" Text="{Binding ModifierSettings[22].FirstArgument, UpdateSourceTrigger=PropertyChanged}" ZDY:TextBoxExtension.Placeholder="正则表达式"/>
+                                <ZDY:TextBox Width="120" Text="{Binding ModifierSettings[23].FirstArgument, UpdateSourceTrigger=PropertyChanged}" ZDY:TextBoxExtension.Placeholder="正则表达式"/>
                                 <TextBlock Text="的字符替换为"/>
                                 <ZDY:TextBox Text="{Binding ModifierSettings[22].SecondArgument}" ZDY:TextBoxExtension.Placeholder="字符"/>
                             </DockPanel>
                             <DockPanel>
-                                <ZDY:CheckBox Name="ReplaceString" IsChecked="{Binding ModifierSettings[23].IsUsed}"/>
+                                <ZDY:CheckBox Name="ReplaceString" IsChecked="{Binding ModifierSettings[24].IsUsed}"/>
                                 <TextBlock Text="将名称中的"/>
-                                <ZDY:TextBox Width="120" Text="{Binding ModifierSettings[23].FirstArgument, UpdateSourceTrigger=PropertyChanged}" ZDY:TextBoxExtension.Placeholder="字符"/>
-                                <TextBlock Text="替换为"/>
-                                <ZDY:TextBox Text="{Binding ModifierSettings[23].SecondArgument, UpdateSourceTrigger=PropertyChanged}"  ZDY:TextBoxExtension.Placeholder="字符"/>
-                            </DockPanel>
-                            <DockPanel>
-                                <ZDY:CheckBox Name="ReplaceStringCaseInsensitive" IsChecked="{Binding ModifierSettings[24].IsUsed}"/>
-                                <TextBlock Text="将名称中的"/>
-                                <ZDY:TextBox Width="120" Text="{Binding ModifierSettings[24].FirstArgument, UpdateSourceTrigger=PropertyChanged}" ZDY:TextBoxExtension.Placeholder="字符（忽略大小写）"/>
+                                <ZDY:TextBox Width="120" Text="{Binding ModifierSettings[24].FirstArgument, UpdateSourceTrigger=PropertyChanged}" ZDY:TextBoxExtension.Placeholder="字符"/>
                                 <TextBlock Text="替换为"/>
                                 <ZDY:TextBox Text="{Binding ModifierSettings[24].SecondArgument, UpdateSourceTrigger=PropertyChanged}"  ZDY:TextBoxExtension.Placeholder="字符"/>
+                            </DockPanel>
+                            <DockPanel>
+                                <ZDY:CheckBox Name="ReplaceStringCaseInsensitive" IsChecked="{Binding ModifierSettings[25].IsUsed}"/>
+                                <TextBlock Text="将名称中的"/>
+                                <ZDY:TextBox Width="120" Text="{Binding ModifierSettings[25].FirstArgument, UpdateSourceTrigger=PropertyChanged}" ZDY:TextBoxExtension.Placeholder="字符（忽略大小写）"/>
+                                <TextBlock Text="替换为"/>
+                                <ZDY:TextBox Text="{Binding ModifierSettings[25].SecondArgument, UpdateSourceTrigger=PropertyChanged}"  ZDY:TextBoxExtension.Placeholder="字符"/>
                             </DockPanel>
                         </StackPanel>
 
@@ -247,19 +251,19 @@
 
                         <StackPanel Margin="0,8">
                             <DockPanel>
-                                <ZDY:CheckBox Name="RemoveTimeString" IsChecked="{Binding ModifierSettings[25].IsUsed}"/>
+                                <ZDY:CheckBox Name="RemoveTimeString" IsChecked="{Binding ModifierSettings[26].IsUsed}"/>
                                 <TextBlock Text="去掉名称中的日期字符串" />
                             </DockPanel>
                             <DockPanel>
-                                <ZDY:CheckBox Name="FormatTimeString" IsChecked="{Binding ModifierSettings[26].IsUsed}"/>
+                                <ZDY:CheckBox Name="FormatTimeString" IsChecked="{Binding ModifierSettings[27].IsUsed}"/>
                                 <TextBlock Text="使用" />
-                                <ZDY:TextBox Width="120" Text="{Binding ModifierSettings[26].FirstArgument, UpdateSourceTrigger=PropertyChanged}" ZDY:TextBoxExtension.Placeholder="例：yyyy.MM.dd"/>
+                                <ZDY:TextBox Width="120" Text="{Binding ModifierSettings[27].FirstArgument, UpdateSourceTrigger=PropertyChanged}" ZDY:TextBoxExtension.Placeholder="例：yyyy.MM.dd"/>
                                 <TextBlock Text="格式化名称中的日期字符串" />
                             </DockPanel>
                             <DockPanel>
-                                <ZDY:CheckBox Name="KeepTimeString" IsChecked="{Binding ModifierSettings[27].IsUsed}"/>
+                                <ZDY:CheckBox Name="KeepTimeString" IsChecked="{Binding ModifierSettings[28].IsUsed}"/>
                                 <TextBlock Text="提取名称中的日期字符串后附加到位置"/>
-                                <ZDY:TextNumberBox Text="{Binding ModifierSettings[27].FirstArgument}"/>
+                                <ZDY:TextNumberBox Text="{Binding ModifierSettings[28].FirstArgument}"/>
                                 <TextBlock Text="处"/>
                             </DockPanel>
                         </StackPanel>
@@ -268,18 +272,18 @@
 
                         <StackPanel Margin="0,8">
                             <DockPanel>
-                                <ZDY:CheckBox Name="AppendFromDirectoryFiles" IsChecked="{Binding ModifierSettings[28].IsUsed}"/>
+                                <ZDY:CheckBox Name="AppendFromDirectoryFiles" IsChecked="{Binding ModifierSettings[29].IsUsed}"/>
                                 <TextBlock Text="在名称位置"/>
-                                <ZDY:TextNumberBox Text="{Binding ModifierSettings[28].SecondArgument}"/>
+                                <ZDY:TextNumberBox Text="{Binding ModifierSettings[29].SecondArgument}"/>
                                 <TextBlock Text="处追加"/>
                                 <ZDY:Button x:Name="AppendFromDirectoryFilesButton" VerticalAlignment="Center"
                                     Height="26" Margin="5 0 0 0" Padding="10 6" Click="AppendFromDirectoryFilesButton_Click">
                                     <Button.Content>
                                         <Grid>
                                             <TextBlock x:Name="AppendFromDirectoryNameTextBlock" Style="{StaticResource DialogButtonInnerText}"
-                                                   Text="{Binding ModifierSettings[28].FirstArgument, Converter={ZDY:FilePathToNameConverter}}" 
-                                                   ToolTip="{Binding ModifierSettings[28].FirstArgument}"
-                                                   Visibility="{Binding ModifierSettings[28].FirstArgument, Converter={ZDY:NullOrEmptyStringToVisibilityConverter}}"/>
+                                                   Text="{Binding ModifierSettings[29].FirstArgument, Converter={ZDY:FilePathToNameConverter}}" 
+                                                   ToolTip="{Binding ModifierSettings[29].FirstArgument}"
+                                                   Visibility="{Binding ModifierSettings[29].FirstArgument, Converter={ZDY:NullOrEmptyStringToVisibilityConverter}}"/>
                                             <TextBlock Text="指定文件夹" Style="{StaticResource DialogButtonInnerText}"
                                                    Visibility="{Binding ElementName=AppendFromDirectoryNameTextBlock, Path=Visibility, Converter={ZDY:VisibilityToInverseVisibilityConverter}}"/>
                                         </Grid>
@@ -288,18 +292,18 @@
                                 <TextBlock Text="中的文件名称"/>
                             </DockPanel>
                             <DockPanel>
-                                <ZDY:CheckBox Name="AppendFromTextFile" IsChecked="{Binding ModifierSettings[29].IsUsed}"/>
+                                <ZDY:CheckBox Name="AppendFromTextFile" IsChecked="{Binding ModifierSettings[30].IsUsed}"/>
                                 <TextBlock Text="在名称位置"/>
-                                <ZDY:TextNumberBox Text="{Binding ModifierSettings[29].SecondArgument}"/>
+                                <ZDY:TextNumberBox Text="{Binding ModifierSettings[30].SecondArgument}"/>
                                 <TextBlock Text="处追加"/>
                                 <ZDY:Button x:Name="AppendFromTextFileButton" VerticalAlignment="Center"
                                     Height="26" Margin="5 0 0 0" Padding="10 6" Click="AppendFromTextFileButton_Click">
                                     <Button.Content>
                                         <Grid>
                                             <TextBlock x:Name="AppendFromTextFileNameTextBlock" Style="{StaticResource DialogButtonInnerText}"
-                                                   Text="{Binding ModifierSettings[29].FirstArgument, Converter={ZDY:FilePathToNameConverter}}" 
-                                                   ToolTip="{Binding ModifierSettings[29].FirstArgument}"
-                                                   Visibility="{Binding ModifierSettings[29].FirstArgument, Converter={ZDY:NullOrEmptyStringToVisibilityConverter}}"/>
+                                                   Text="{Binding ModifierSettings[30].FirstArgument, Converter={ZDY:FilePathToNameConverter}}" 
+                                                   ToolTip="{Binding ModifierSettings[30].FirstArgument}"
+                                                   Visibility="{Binding ModifierSettings[30].FirstArgument, Converter={ZDY:NullOrEmptyStringToVisibilityConverter}}"/>
                                             <TextBlock Text="指定文件" Style="{StaticResource DialogButtonInnerText}"
                                                    Visibility="{Binding ElementName=AppendFromTextFileNameTextBlock, Path=Visibility, Converter={ZDY:VisibilityToInverseVisibilityConverter}}"/>
                                         </Grid>
@@ -308,23 +312,23 @@
                                 <TextBlock Text="中的字符"/>
                             </DockPanel>
                             <DockPanel>
-                                <ZDY:CheckBox Name="ParentDirectory" IsChecked="{Binding ModifierSettings[30].IsUsed}"/>
+                                <ZDY:CheckBox Name="ParentDirectory" IsChecked="{Binding ModifierSettings[31].IsUsed}"/>
                                 <TextBlock Text="在名称位置" />
-                                <ZDY:TextNumberBox Text="{Binding ModifierSettings[30].FirstArgument}"/>
+                                <ZDY:TextNumberBox Text="{Binding ModifierSettings[31].FirstArgument}"/>
                                 <TextBlock Text="处追加其所在文件夹名称"/>
                             </DockPanel>
                             <DockPanel>
-                                <ZDY:CheckBox Name="OriginalFileName" IsChecked="{Binding ModifierSettings[31].IsUsed}"/>
+                                <ZDY:CheckBox Name="OriginalFileName" IsChecked="{Binding ModifierSettings[32].IsUsed}"/>
                                 <TextBlock Text="在名称位置"/>
-                                <ZDY:TextNumberBox Text="{Binding ModifierSettings[31].FirstArgument}"/>
+                                <ZDY:TextNumberBox Text="{Binding ModifierSettings[32].FirstArgument}"/>
                                 <TextBlock Text="处追加原始文件名称"/>
                             </DockPanel>
                             <DockPanel>
-                                <ZDY:CheckBox Name="AddExtension" IsChecked="{Binding ModifierSettings[32].IsUsed}"/>
+                                <ZDY:CheckBox Name="AddExtension" IsChecked="{Binding ModifierSettings[33].IsUsed}"/>
                                 <TextBlock Text="在名称后追加文件后缀名"/>
                             </DockPanel>
                             <DockPanel>
-                                <ZDY:CheckBox Name="RemoveExtension" IsChecked="{Binding ModifierSettings[33].IsUsed}"/>
+                                <ZDY:CheckBox Name="RemoveExtension" IsChecked="{Binding ModifierSettings[34].IsUsed}"/>
                                 <TextBlock Text="去掉名称中的文件后缀名"/>
                             </DockPanel>
                         </StackPanel>
@@ -333,33 +337,33 @@
 
                         <StackPanel Margin="0,8">
                             <DockPanel IsEnabled="{Binding IsCountingFileQuantity}">
-                                <ZDY:CheckBox Name="AppendCountingFileQuantityAfter" IsChecked="{Binding ModifierSettings[34].IsUsed}"/>
+                                <ZDY:CheckBox Name="AppendCountingFileQuantityAfter" IsChecked="{Binding ModifierSettings[35].IsUsed}"/>
                                 <TextBlock Text="在名称后追加文件数量" />
                             </DockPanel>
                             <DockPanel IsEnabled="{Binding IsCountingFileQuantity}">
-                                <ZDY:CheckBox Name="AppendCountingFileQuantity" IsChecked="{Binding ModifierSettings[35].IsUsed}"/>
+                                <ZDY:CheckBox Name="AppendCountingFileQuantity" IsChecked="{Binding ModifierSettings[36].IsUsed}"/>
                                 <TextBlock Text="在名称位置" />
-                                <ZDY:TextNumberBox Text="{Binding ModifierSettings[35].SecondArgument}"/>
+                                <ZDY:TextNumberBox Text="{Binding ModifierSettings[36].SecondArgument}"/>
                                 <TextBlock Text="处追加文件数量"/>
                             </DockPanel>
                             <DockPanel IsEnabled="{Binding IsCountingCreationTime}">
-                                <ZDY:CheckBox Name="AppendCountingCreationTimeAfter" IsChecked="{Binding ModifierSettings[36].IsUsed}"/>
+                                <ZDY:CheckBox Name="AppendCountingCreationTimeAfter" IsChecked="{Binding ModifierSettings[37].IsUsed}"/>
                                 <TextBlock Text="在名称后追加创建时间" />
                             </DockPanel>
                             <DockPanel IsEnabled="{Binding IsCountingCreationTime}">
-                                <ZDY:CheckBox Name="AppendCountingCreationTime" IsChecked="{Binding ModifierSettings[37].IsUsed}"/>
+                                <ZDY:CheckBox Name="AppendCountingCreationTime" IsChecked="{Binding ModifierSettings[38].IsUsed}"/>
                                 <TextBlock Text="在名称位置" />
-                                <ZDY:TextNumberBox Text="{Binding ModifierSettings[37].SecondArgument}"/>
+                                <ZDY:TextNumberBox Text="{Binding ModifierSettings[38].SecondArgument}"/>
                                 <TextBlock Text="处追加创建时间"/>
                             </DockPanel>
                             <DockPanel IsEnabled="{Binding IsCountingModifiedTime}">
-                                <ZDY:CheckBox Name="AppendCountingModifiedTimeAfter" IsChecked="{Binding ModifierSettings[38].IsUsed}"/>
+                                <ZDY:CheckBox Name="AppendCountingModifiedTimeAfter" IsChecked="{Binding ModifierSettings[39].IsUsed}"/>
                                 <TextBlock Text="在名称后追加修改时间" />
                             </DockPanel>
                             <DockPanel IsEnabled="{Binding IsCountingModifiedTime}">
-                                <ZDY:CheckBox Name="AppendCountingModifiedTime" IsChecked="{Binding ModifierSettings[39].IsUsed}"/>
+                                <ZDY:CheckBox Name="AppendCountingModifiedTime" IsChecked="{Binding ModifierSettings[40].IsUsed}"/>
                                 <TextBlock Text="在名称位置" />
-                                <ZDY:TextNumberBox Text="{Binding ModifierSettings[39].SecondArgument}"/>
+                                <ZDY:TextNumberBox Text="{Binding ModifierSettings[40].SecondArgument}"/>
                                 <TextBlock Text="处追加修改时间"/>
                             </DockPanel>
                         </StackPanel>

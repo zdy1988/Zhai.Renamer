@@ -279,6 +279,10 @@ namespace Zhai.Renamer.Models
                         renamerFile.ModifiedName = input.AppendAtPosition(text1, position1);
                         break;
 
+                    case ModifierKind.keepChinese:
+                        renamerFile.ModifiedName = input.ExtractChinese();
+                        break;
+
                     case ModifierKind.KeepNumeric:
                         renamerFile.ModifiedName = input.ExtractNumeric();
                         break;
@@ -342,10 +346,10 @@ namespace Zhai.Renamer.Models
                         }
                         catch (ArgumentException ex)
                         {
+                            renamerFile.ModifiedName = string.Empty;
                             Debug.WriteLine(ex.Message, ex);
                             return false;
                         }
-                        renamerFile.ModifiedName = string.Empty;
                         break;
 
                     case ModifierKind.RegexReplace:
@@ -355,10 +359,10 @@ namespace Zhai.Renamer.Models
                         }
                         catch (ArgumentException ex)
                         {
+                            renamerFile.ModifiedName = string.Empty;
                             Debug.WriteLine(ex.Message, ex);
                             return false;
                         }
-                        renamerFile.ModifiedName = string.Empty;
                         break;
 
                     case ModifierKind.ReplaceString:

@@ -999,8 +999,8 @@ namespace Zhai.Renamer
             }
             else
             {
-                ModifierSettings[31].IsUsed = false;
                 ModifierSettings[32].IsUsed = false;
+                ModifierSettings[33].IsUsed = false;
             }
 
         })).Value;
@@ -1013,8 +1013,8 @@ namespace Zhai.Renamer
             }
             else
             {
-                ModifierSettings[33].IsUsed = false;
                 ModifierSettings[34].IsUsed = false;
+                ModifierSettings[35].IsUsed = false;
             }
 
         })).Value;
@@ -1027,8 +1027,8 @@ namespace Zhai.Renamer
             }
             else
             {
-                ModifierSettings[35].IsUsed = false;
                 ModifierSettings[36].IsUsed = false;
+                ModifierSettings[37].IsUsed = false;
             }
 
         })).Value;

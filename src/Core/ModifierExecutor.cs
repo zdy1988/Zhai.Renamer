@@ -24,6 +24,14 @@ namespace Zhai.Renamer.Core
             return s.Insert(n, text);
         }
 
+
+        internal static string ExtractChinese(this string s)
+        {
+            var result = "";
+            foreach (var match in Regex.Matches(s, @"[\u4e00-\u9fa5]")) result += match;
+            return result;
+        }
+
         //String.Insert
         //internal static string AppendAtPosition(this string s, int position, string text)
 
